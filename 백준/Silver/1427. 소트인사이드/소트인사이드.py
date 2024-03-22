@@ -1,7 +1,7 @@
 import sys
 input = sys.stdin.readline
 
-N_string=input().rstrip()
+N_string=input().strip()
 
 
 N=[int(digit) for digit in N_string]
