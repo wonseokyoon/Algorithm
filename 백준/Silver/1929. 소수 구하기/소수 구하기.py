@@ -1,10 +1,17 @@
-m,n=map(int,input().split())
+import math
+import sys
+input=sys.stdin.readline
 
-for i in range(m,n+1):
-    if i==1:#1은 소수가 아니므로 제외
-        continue
-    for j in range(2,int(i**0.5)+1):
-        if i%j==0: #약수가 존재하므로 소수가 아님
-            break   #더이상 검사할 필요가 없으므로 멈춤
-    else:
+def is_prime(x):
+    if x<2 : return False
+
+    for i in range(2,int(math.sqrt(x))+1):
+        if(x%i==0):
+            return False
+    return True
+
+N,M=map(int,input().split())
+
+for i in range(N,M+1):
+    if is_prime(i)==True:
         print(i)
