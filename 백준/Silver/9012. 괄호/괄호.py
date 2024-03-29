@@ -4,6 +4,8 @@ input=sys.stdin.readline
 
 
 T=int(input())
+
+command=[]
 for _ in range(T):
     VPS=True
     stack=[]
@@ -17,8 +19,8 @@ for _ in range(T):
             else:
                 VPS=False
                 break
-    if not VPS or stack:
-        print("NO")
-    else:
+    if VPS and not stack:
         print("YES")
+    else:
+        print("NO")
             
