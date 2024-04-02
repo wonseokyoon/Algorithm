@@ -14,22 +14,21 @@ def medium(nums): #중앙값
     return nums[len(nums)//2]
 
 def mode(nums):   #최빈값
-    cnt={}
-    num_list=[]
-    unique_nums=list(set(nums))
-    for i in unique_nums:
-        cnt[i]=0
-    for i in nums:
-        cnt[i]+=1
-    maxx=max(cnt.values())
-    for key,values in cnt.items():
-        if values==maxx:
-            num_list.append(key)
-    num_list.sort()
-    if(len(num_list)==1):
-        return num_list[0]
+    dic={}
+    mode_list=[]
+    for num in nums:
+        if num not in dic:
+            dic[num]=1
+        else:
+            dic[num]+=1
+    maxx=max(dic.values())
+    for key,value in dic.items():
+        if maxx==value:
+            mode_list.append(key)
+    if len(mode_list)==1:
+        return mode_list[0]
     else:
-        return num_list[1]
+        return mode_list[1]
         
 def ranges(nums):  #범위
     return nums[-1]-nums[0]
@@ -42,7 +41,6 @@ nums=[]
 for i in range(T):
     nums.append(int(input()))
 nums.sort()
-
 mean=mean(nums)
 medium=medium(nums)
 mode=mode(nums)
