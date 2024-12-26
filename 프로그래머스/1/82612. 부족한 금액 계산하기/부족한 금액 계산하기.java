@@ -5,11 +5,6 @@ class Solution {
             sum+=price*i;
         }
         // 3, 3+6=9, 3+6+9=18, 3+6+9+12=30
-        if(sum>money){  //돈 모자란 경우
-            return sum-money;
-        }
-        else{
-            return 0;
-        }
+        return Math.max(sum-money,0);
     }
 }
