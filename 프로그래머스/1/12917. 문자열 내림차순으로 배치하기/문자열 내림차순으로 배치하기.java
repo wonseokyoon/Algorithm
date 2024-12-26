@@ -1,14 +1,10 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Arrays;
 class Solution {
      public String solution(String s) {
-        List<String> str=new ArrayList<>();
-        for(int i=0;i<s.length();i++){
-            str.add(String.valueOf(s.charAt(i)));
-        }
-        Collections.sort(str,Collections.reverseOrder());   //내림차순
-        String answer=String.join("",str);
-        return answer;
+        char[] c= s.toCharArray();  // 문자열 s를 char 배열로 변환
+        Arrays.sort(c); // 오름차순 정렬
+        StringBuilder sb=new StringBuilder(new String(c));
+        sb.reverse();
+        return sb.toString();
     }
 }
