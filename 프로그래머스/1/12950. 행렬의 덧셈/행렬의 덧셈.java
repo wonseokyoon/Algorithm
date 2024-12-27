@@ -1,15 +1,12 @@
 class Solution {
     public int[][] solution(int[][] arr1, int[][] arr2) {
-        int col= arr1.length; // 행의크기
-        int row= arr1[0].length;  // 열의 크기
-        int[][] answer=new int[col][row];
+        int[][] answer=arr1;
 
-        for(int i=0;i<col;i++){
-            for(int j=0;j<row;j++){
-                answer[i][j]=arr1[i][j]+arr2[i][j];
+        for(int i=0;i< answer.length;i++){
+            for(int j=0;j<answer[0].length;j++){
+                answer[i][j]+=arr2[i][j];
             }
         }
         return answer;
-    
     }
 }
