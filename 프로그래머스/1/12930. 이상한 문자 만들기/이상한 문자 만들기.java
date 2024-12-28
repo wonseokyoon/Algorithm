@@ -1,22 +1,13 @@
 class Solution {
     public String solution(String s) {
-        StringBuilder result=new StringBuilder();
-        String[] str=s.split(" ",-1);  //try, hello, world
-        for(String word: str) {
-            StringBuilder sb = new StringBuilder();
-
-            for (int i = 0; i < word.length(); i++) {
-                char c = word.charAt(i);
-                if (i % 2 == 0) { //짝수: 대문자로
-                    sb.append(Character.toUpperCase(c));
-                }else{
-                    sb.append(Character.toLowerCase(c));
-                }
-            }
-            result.append(sb).append(" ");
+        String answer="";
+        int cnt=0;
+        String[] str=s.split("");   // "t","r","y"," ", ...
+        for(String word:str){
+            cnt=word.contains(" ")?0:cnt+1; // 공백문자 나오면 0으로 초기화
+            answer+=(cnt%2==0)?word.toLowerCase():word.toUpperCase();
         }
-                result.deleteCharAt(result.length()-1); //마지막 " " 제거
+        return answer;
 
-        return result.toString();
     }
 }
