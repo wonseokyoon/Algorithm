@@ -1,26 +1,13 @@
-
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 class Solution {
-public int[] solution(String s) {
-        ArrayList<Integer> answer=new ArrayList<>();
-        char[] str=s.toCharArray();
-        int cnt=0;
-        ArrayList<Character> exist=new ArrayList<>();
-        for(char c:str){
-            if(exist.contains(c)){  //앞에 이미 같은 문자가 있는 경우
-                for(int i=cnt-1;i>=0;i--){
-                    if(str[cnt]==str[i]){
-                        answer.add(cnt-i);
-                        break;
-                    }
-                }
-            }else {
-                exist.add(c);   // 문자 추가
-                answer.add(-1); // -1 추가
-            }
-            cnt++;
+    public int[] solution(String s) {
+        HashMap<Character,Integer> map=new HashMap<Character, Integer>();
+        char[] str=s.toCharArray();   // f,o,o,t,b,a,r
+        int[] answer=new int[s.length()];
+        for(int i=0;i<s.length();i++){
+            answer[i]=i-map.getOrDefault(str[i],i+1);
+            map.put(str[i],i);
         }
-        return answer.stream().mapToInt(Integer::intValue).toArray();
+        return answer;
     }
 }
