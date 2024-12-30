@@ -9,7 +9,6 @@ class Solution {
                 sum.add(numbers[i]+numbers[j]);
             }
         }
-        Collections.sort(sum);
-        return sum.stream().distinct().mapToInt(Integer::intValue).toArray();
+        return sum.stream().distinct().sorted().mapToInt(Integer::intValue).toArray();
     }
 }
