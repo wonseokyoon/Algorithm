@@ -1,17 +1,17 @@
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.*;
 class Solution {
-    public String[] solution(String[] strings, int n) {
-        Arrays.sort(strings, new Comparator<String>() {
-            @Override
-            public int compare(String s1, String s2) {
-                if(s1.charAt(n)==s2.charAt(n)){
-                    return s1.compareTo(s2);
-                }
-                return Character.compare(s1.charAt(n),s2.charAt(n));
-            }
-        });
-        return strings;
+     public String[] solution(String[] strings, int n) {
+        ArrayList<String> str=new ArrayList();
+        for(int i=0;i< strings.length;i++){
+            str.add(strings[i].charAt(n)+strings[i]);
+        }   // babce babcd dcdx
+        Collections.sort(str);
+        String[] answer=new String[strings.length];
+        for(int i=0;i< strings.length;i++){
+            answer[i]=str.get(i).substring(1);
+        }
+
+        return answer;
 
     }
 }
