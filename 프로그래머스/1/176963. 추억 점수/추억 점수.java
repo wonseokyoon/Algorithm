@@ -9,17 +9,11 @@ public int[] solution(String[] name, int[] yearning, String[][] photo) {
 
         for(int i=0;i< photo.length;i++){
             int sum=0;
-            for(String key:map.keySet()){
-                for(String element:photo[i]){
-                    if(element.equals(key)){
-                        sum+=map.get(key);
-                    }
-                }
+            for(String key:photo[i]){
+                sum+=map.getOrDefault(key,0);
             }
             answer[i]=sum;
         }
-
-
         return answer;
     }
 }
