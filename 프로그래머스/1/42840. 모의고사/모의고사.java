@@ -1,9 +1,7 @@
 import java.util.*;
 class Solution {
-    public int[] solution(int[] answers) {
-        int s1 = 0;
-        int s2 = 0;
-        int s3 = 0;
+   public int[] solution(int[] answers) {
+        int[] score=new int[3];
 
         int[] pattern1={1,2,3,4,5};
         int l1=pattern1.length;
@@ -15,30 +13,34 @@ class Solution {
         // 6 -> 1, 4, 2
         for(int i=0;i< answers.length;i++){
             if(answers[i] == pattern1[i%l1] ){
-                s1++;
+                score[0]++;
             }
             if(answers[i] == pattern2[i%l2] ){
-                s2++;
+                score[1]++;
             }
             if(answers[i] == pattern3[i%l3] ){
-                s3++;
+                score[2]++;
             }
         }
         List<Integer> answer=new ArrayList<>();
-        int maxx=(int)Math.max(s1,s2);
-        maxx=(int)Math.max(maxx,s3);
+        int maxx=(int)Math.max(score[0],Math.max(score[1],score[2]));
 
-
-        if(maxx==s1){
+        if(maxx==score[0]){
             answer.add(1);
         }
-        if (maxx==s2) {
+        if (maxx==score[1]) {
             answer.add(2);
         }
-        if (maxx==s3) {
+        if (maxx==score[2]) {
             answer.add(3);
         }
 
-        return answer.stream().mapToInt(Integer::intValue).toArray();
+        int[] answer2=new int[answer.size()];
+        for(int i=0;i< answer.size();i++){
+            answer2[i]=answer.get(i);
+        }
+
+
+        return answer2;
     }
 }
