@@ -8,14 +8,20 @@ class Solution {
         Arrays.fill(isprime,true);
         isprime[0]=false;
         isprime[1]=false;
+        
+        for(int i=4;i<=n;i+=2){ //짝수 제외
+            isprime[i]=false;
+        }
 
-        for(int i=2;i<=n;i++){
-            if(isprime[i]){ // 소수의 배수도 지움
-                for(int j=i*2;j<=n;j+=i){
-                    isprime[j]=false;
+        for(int i=3;i<=n;i+=2){ 
+            for(int j=2;j*j<=i;j++){
+                if(i%j==0){
+                isprime[i]=false;
+                break;
                 }
             }
         }
+
         for(boolean bool:isprime){
             if(bool) cnt++;
         }
