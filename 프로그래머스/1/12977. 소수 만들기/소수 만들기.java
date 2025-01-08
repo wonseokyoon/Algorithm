@@ -1,33 +1,20 @@
 import java.util.*;
 class Solution {
     public int solution(int[] nums) {
-        // 조합해주는 함수
-        List<Integer> current = new ArrayList<>();
-        // 소수 판별 함수
-        int[] cnt={0};
-        Combination(0, nums,current,cnt);
-        return cnt[0];
-    }
-    public void Combination(int start,int[] nums
-    ,List<Integer> current,int[] cnt){
-        if(current.size()==3){
-            if(isPrime(current)){
-                cnt[0]++;
+        int cnt=0;
+        for(int i=0;i< nums.length;i++){
+            int sum=0;
+            for (int j=i+1;j<nums.length;j++){
+                for (int k=j+1;k< nums.length;k++){
+                    sum=nums[i]+nums[j]+nums[k];
+                    if(isPrime(sum)) cnt++;
+                }
             }
-            return;
         }
-
-        for(int i=start;i< nums.length;i++){
-            current.add(nums[i]);
-            Combination(i+1, nums, current,cnt);
-            current.remove(current.size()-1);   //백트래킹
-        }
-
+        return cnt;
     }
 
-    private boolean isPrime(List<Integer> current) {
-        int n=current.stream().mapToInt(Integer::intValue).sum();
-        //7
+    private boolean isPrime(int n) {
         if(n<2) return false;
         for(int i=2;i*i<=n;i++){
             if(n%i==0) return false;
