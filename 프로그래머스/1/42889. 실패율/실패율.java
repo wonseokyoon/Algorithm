@@ -16,8 +16,7 @@ class Solution {
 
         double[] per=new double[n];
         for(int i=0;i<n;i++){
-            int toatal=clear[i]+clear[i+1];
-            if(toatal==0){
+            if(clear[i]==0){
                 per[i]=0;
             }else{
                 per[i]=(double)(clear[i]-clear[i+1])/clear[i];
