@@ -1,21 +1,12 @@
-import java.util.*;
 class Solution {
     public int solution(int n, int m, int[] section) {
-        boolean[] paint=new boolean[n+1];
-        int cnt=0;
-        Arrays.fill(paint,true);
-        for(int digit:section){
-            paint[digit]=false;
-        }
-        // false인 부분만 true로 채우면 됨
+        int roller=section[0];  //첫번째 지점 시작
+        int cnt=1;
 
-        for(int i=section[0];i<=n;i++){
-            if(!paint[i]){  //안칠해져있으면
-                for(int j=i;j<i+m;j++){
-                    if(j>n) break;  //인덱스 범위 안벗어나게
-                    paint[j]=true;
-                }
+        for(int i=1;i< section.length;i++){
+            if(roller+m-1<section[i]){  // 다음 영역을 못칠함
                 cnt++;
+                roller=section[i];  // 롤러의 시작점을 다음 지점으로 이동
             }
         }
         return cnt;
