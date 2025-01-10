@@ -4,22 +4,23 @@ class Solution {
         int cnt = 0;
 
         for (String str : babbling) {
-            String prev = "";  // 이전 발음
+            String prev = ""; // 이전 발음
             boolean isValid = true;
 
-            while (!str.isEmpty()) { // 공백이 아닌 문자가 남아있으면 계속 진행
+            // 문자열이 공백이 아닐때까지 수행
+            while (!str.isEmpty()) {
                 boolean found = false;
 
                 for (String word : origin) {
-                    if (str.startsWith(word)) { // 단어가 문자열의 시작과 일치하면
-                        if (prev.equals(word)) {  // 이전 발음과 동일하면 무효
+                    if (str.startsWith(word)) { // 단어가 문자열의 시작과 일치하는 경우
+                        if (prev.equals(word)) { // 이전 발음과 동일하면 무효
                             isValid = false;
                         } else {
                             prev = word; // 이전 발음 갱신
                         }
-                        str = str.substring(word.length()); // 발음만큼 문자열을 줄임
+                        str = str.replaceFirst(word, ""); // 발음 제거
                         found = true; // 발음이 발견됨
-                        break; // 잘라내고 다음 반복으로
+                        break; // 일치하는 첫 번째 발음만 처리한 후 종료
                     }
                 }
 
@@ -34,6 +35,7 @@ class Solution {
                 cnt++;
             }
         }
+
         return cnt;
     }
 }
