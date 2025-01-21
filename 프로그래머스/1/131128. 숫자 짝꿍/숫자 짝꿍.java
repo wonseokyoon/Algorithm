@@ -2,37 +2,26 @@ import java.util.*;
 
 class Solution {
     public String solution(String X, String Y) {
-        HashMap<Character,Integer> xmap=new HashMap<>();
-        HashMap<Character,Integer> ymap=new HashMap<>();
-        List<Character> list=new ArrayList<>();
-        for(char x:X.toCharArray()){    //'1':1, '0':2
-            xmap.put(x,xmap.getOrDefault(x,0)+1);
+        int[] x={0,0,0,0,0,0,0,0,0,0};
+        int[] y={0,0,0,0,0,0,0,0,0,0};
+        for(char ch:X.toCharArray()){
+            x[ch-'0']++;
         }
-        for(char y:Y.toCharArray()){
-            ymap.put(y,ymap.getOrDefault(y,0)+1);
+        for(char ch:Y.toCharArray()){
+            y[ch-'0']++;
         }
-        for(char c: xmap.keySet()){
-            if(ymap.containsKey(c)){
-                int count=Math.min(xmap.get(c), ymap.get(c));
-                for(int i=0;i<count;i++){
-                    list.add(c);
-                }
+        // 2 1 0 0 0 0 0 ...
+        // 2 0 1 1 1 1 0 ...
+        StringBuilder sb=new StringBuilder();
+        for(int i=9;i>=0;i--){
+            int cnt=Math.min(x[i],y[i]);
+            for(int j=0;j<cnt;j++){
+                sb.append(i);
             }
         }
+        if(sb.length()==0) return "-1";
+        if(sb.toString().charAt(0)=='0') return "0";
+        return sb.toString();
 
-        if(list.isEmpty()){
-            return "-1";
-        }
-        list.sort(Comparator.reverseOrder());
-        if(list.get(list.size() - 1).equals('0') && list.get(0).equals('0')){
-
-            return "0";
-        }
-
-        StringBuilder result=new StringBuilder();
-        for(Character c:list){
-            result.append(c);
-        }
-        return result.toString();
     }
 }
