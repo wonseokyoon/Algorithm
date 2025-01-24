@@ -1,39 +1,25 @@
 import java.util.*;
 class Solution {
-    public int solution(int[] ingredient) {
+     public int solution(int[] ingredient) {
         int[] target={1,2,3,1};
         //2, 1, 1, 2, 3, 1, 2, 3, 1}
-        ArrayList<Integer> list=new ArrayList<>
-                (Arrays.asList(Arrays.stream(ingredient)
-                        .boxed().toArray(Integer[]::new)));
+        Stack<Integer> stack=new Stack<>();
         int cnt=0;
         int index=0;
-
-        while(index<=list.size()- target.length){
-            if(isTarget(list,target,index)){
-                extractTarget(list,target,index);
-                cnt++;
-                index=Math.max(0,index-target.length);
-            }else{
-                index++;
+        for(int num:ingredient){
+            stack.push(num);
+            index++;
+            if(stack.size()>= 4){
+                if(stack.get(index-1)==1
+                && stack.get(index-2)==3 && stack.get(index-3)==2
+                && stack.get(index-4)==1){
+                    index-=4;
+                    for(int i=0;i<4;i++) stack.pop();
+                    cnt++;
+                }
             }
         }
-
         return cnt;
     }
 
-    private void extractTarget(ArrayList<Integer> list,int[] target,int start) {
-        for (int i=0;i<target.length;i++){
-            list.remove(start);
-        }
-    }
-
-    public static boolean isTarget(ArrayList<Integer> array,int[] target,int start){
-        for(int i=0;i< target.length;i++){
-            if(array.get(start+i)!=target[i]){
-                return false;
-            }
-        }
-        return true;
-    }
 }
