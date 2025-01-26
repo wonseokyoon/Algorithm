@@ -1,34 +1,25 @@
 class Solution {
     public int solution(int n, int[] lost, int[] reserve) {
-        int[] list=new int[n];
-        for(int i=0;i<n;i++){
-            list[i]=1;
-        }
-        // 1 0 1 0 1
-        for(int i:lost){
-            list[i-1]-=1;
-        }
-        // 2 0 2 0 2
-        for(int i:reserve){
-            list[i-1]+=1;
-        }
+        int[] people = new int[n];
+        int answer = n;
 
-        for(int i=0;i<n;i++) {
-            if(list[i]==2){
-                if(i-1>=0 && list[i-1]==0){
-                    list[i-1]+=1;
-                }else if(i+1<n && list[i+1]==0){
-                    list[i+1]+=1;
-                }
+        for (int l : lost) 
+            people[l-1]--;
+        for (int r : reserve) 
+            people[r-1]++;
+
+        for (int i = 0; i < people.length; i++) {
+            if(people[i] == -1) {
+                if(i-1>=0 && people[i-1] == 1) {
+                    people[i]++;
+                    people[i-1]--;
+                }else if(i+1< people.length && people[i+1] == 1) {
+                    people[i]++;
+                    people[i+1]--;
+                }else 
+                    answer--;
             }
         }
-        int cnt=0;
-        for(int i=0;i<n;i++){
-            if(list[i]>=1) cnt++;
-        }
-
-
-        return cnt;
-
+        return answer;
     }
 }
