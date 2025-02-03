@@ -1,51 +1,65 @@
 class Solution {
  public String solution(String new_id) {
-        StringBuilder sb=new StringBuilder(new_id);
 
+        String s=new KAKAOID(new_id)
+                .replaceToLowerCase()
+                .filter()
+                .toSingleDot()
+                .noStartEndDot()
+                .noBlank()
+                .lessThan16()
+                .moreThan2()
+                .toStirng();
+        return s;
+    }
+    private static class KAKAOID{
+        private String s;
+
+        KAKAOID(String s){
+            this.s=s;
+        }
         // 1
-        new_id= new_id.toLowerCase();
-        System.out.println("1 :"+new_id);
+        private KAKAOID replaceToLowerCase(){
+            s=s.toLowerCase();
+            return this;
+        }
         // 2
-        new_id=new_id.replaceAll("[^a-z0-9-_.]","");
-        System.out.println("2 :"+new_id);
-
+        public KAKAOID filter() {
+            s=s.replaceAll("[^a-z0-9-_.]","");
+            return this;
+        }
         // 3
-        while(new_id.contains("..")){
-            new_id=new_id.replace("..",".");
-            System.out.println("3 :"+new_id);
+        public KAKAOID toSingleDot() {
+            s=s.replaceAll("[.]{2,}",".");
+            return this;
         }
-
         // 4
-        while(new_id.startsWith(".") || new_id.endsWith(".")){
-            if(new_id.startsWith(".")){
-                new_id=new_id.substring(1);
-            } else if (new_id.endsWith(".")) {
-                new_id=new_id.substring(0,new_id.length()-1);
-            }
+        public KAKAOID noStartEndDot() {
+            s = s.replaceAll("^[.]|[.]$","");
+            return this;
         }
-        System.out.println("4 :"+new_id);
-
         // 5
-        if(new_id.isEmpty()){
-            new_id="a";
+        public KAKAOID noBlank() {
+            s=s.isBlank()?"a":s;
+            return this;
         }
-        System.out.println("5 :"+new_id);
 
-        // 6
-        if(new_id.length()>=16){
-            new_id=new_id.substring(0,15);
-            while(new_id.endsWith(".")){
-                new_id=new_id.substring(0,new_id.length()-1);
-            }
+        public KAKAOID lessThan16() {
+            s=s.length()<=15?s:s.substring(0,15);
+            s=s.replaceAll("[.]$","");
+            return this;
         }
-        System.out.println("6 :"+new_id);
-        //7
-        if(new_id.length()<=2){
-            char last=new_id.charAt(new_id.length()-1);
-            while(new_id.length()<3){
-                new_id+=last;
+
+        public KAKAOID moreThan2() {
+            while(s.length()<3){
+                char last=s.charAt(s.length()-1);
+                s+=last;
             }
+            return this;
         }
-        return new_id;
+
+        public String toStirng(){
+            return s;
+        }
     }
 }
