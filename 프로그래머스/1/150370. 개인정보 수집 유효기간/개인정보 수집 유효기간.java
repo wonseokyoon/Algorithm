@@ -1,51 +1,62 @@
 import java.util.*;
 
 class Solution {
-    public int[] solution(String today, String[] terms, String[] privacies) {
-        String[] todayParts = today.split("\\.");
-        int todayYear = Integer.parseInt(todayParts[0]);
-        int todayMonth = Integer.parseInt(todayParts[1]);
-        int todayDay = Integer.parseInt(todayParts[2]);
+        public int[] solution(String today, String[] terms, String[] privacies) {
+        String[] Params=today.split("\\.");
+        int todayYear=Integer.parseInt(Params[0]);   // 년
+        int todayMonth=Integer.parseInt(Params[1]);  // 월
+        int todayDay=Integer.parseInt(Params[2]);    // 일
+        System.out.println(todayYear+" "+todayMonth+" "+todayDay);
 
-        ArrayList<Integer> result = new ArrayList<>();
-        HashMap<String, Integer> map = new HashMap<>();
-        
-        // 약관 종류와 유효기간을 저장
-        for (String term : terms) {
-            String[] parts = term.split(" ");
-            map.put(parts[0], Integer.parseInt(parts[1]));
+        ArrayList<Integer> result=new ArrayList<>();
+        HashMap<String,Integer> map=new HashMap<>();
+
+        for(int i=0;i< terms.length;i++){
+            // A 6, B 12, C 3
+            map.put(terms[i].split(" ")[0], Integer.valueOf(terms[i].split(" ")[1]));
+            System.out.println(map);
         }
 
-        // 개인정보 정보를 확인
-        for (int i = 0; i < privacies.length; i++) {
-            String[] privacyParts = privacies[i].split(" ");
-            String[] dateParts = privacyParts[0].split("\\.");
+        for(int i=0;i< privacies.length;i++) {
+            String days = privacies[i].split(" ")[0];
+            String type = privacies[i].split(" ")[1];
+            int year = Integer.parseInt(days.split("\\.")[0]);   //2021
+            int month = Integer.parseInt(days.split("\\.")[1]);  //05
+            int day = Integer.parseInt(days.split("\\.")[2]) - 1;    //02
 
-            int year = Integer.parseInt(dateParts[0]);
-            int month = Integer.parseInt(dateParts[1]);
-            int day = Integer.parseInt(dateParts[2]);
+            // 더함
+            month+=map.get(type);
 
-            String type = privacyParts[1];
-            int validMonths = map.get(type);
-
-            // 유효기간 후의 날짜 계산
-            month += validMonths;
-
-            // 년도 넘어가는 처리
-            while (month > 12) {
-                month -= 12;
+            if(day==0){
+                day+=28;
+                month--;
+                if(month==0){
+                    year--;
+                    month+=12;
+                }
+            }
+            
+            // 연도 넘어가는거 처리
+            while(month>12){
+                month-=12;
                 year++;
             }
-
-            // 당일과 비교
-            if (year < todayYear || 
-                (year == todayYear && (month < todayMonth || 
-                (month == todayMonth && day <= todayDay)))) {
-                result.add(i + 1); // 개인정보 번호는 1부터 시작
+            
+            System.out.println(i+1+" "+year+" "+month+" "+day);
+            if (year < todayYear) {
+                result.add(i + 1);
+            } else if (year == todayYear) {
+                if (month < todayMonth) {
+                    result.add(i + 1);
+                } else if (month == todayMonth) {
+                    if (day < todayDay) {
+                        result.add(i + 1);
+                    }
+                }
             }
+
         }
 
-        // 결과를 배열로 변환
         return result.stream().mapToInt(Integer::intValue).toArray();
     }
 }
