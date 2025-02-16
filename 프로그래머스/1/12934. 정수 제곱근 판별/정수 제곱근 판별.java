@@ -1,13 +1,9 @@
 class Solution {
   public long solution(long n) {
-      if(n==1){
-          return 4;
-      }
-      for(long i=2;i<n;i++){
-          if(n/i == i && n%i ==0){
-              return (i+1)*(i+1);
-          }
-      }
-      return -1;
+      if (Math.pow((int)Math.sqrt(n), 2) == n) {
+            return (long) Math.pow(Math.sqrt(n) + 1, 2);
+        }
+
+        return -1;
   }
 }
