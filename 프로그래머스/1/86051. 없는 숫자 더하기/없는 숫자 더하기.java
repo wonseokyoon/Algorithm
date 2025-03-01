@@ -1,6 +1,9 @@
-import java.util.Arrays;
 class Solution {
     public int solution(int[] numbers) {
-        return 45-Arrays.stream(numbers).sum();
+        int sum = 45;
+        for (int i : numbers) {
+            sum -= i;
+        }
+        return sum;
     }
 }
