@@ -1,43 +1,29 @@
-import java.util.Arrays;
+import java.util.*;
 
 class Solution {
     public int[] solution(int[] lottos, int[] win_nums) {
-        int zero=0;
+        HashMap<Integer,Integer> map=new HashMap<>();
+        map.put(6,1);
+        map.put(5,2);
+        map.put(4,3);
+        map.put(3,4);
+        map.put(2,5);
+        map.put(1,6);
+        map.put(0,6);
         int cnt=0;
+        int zero=0;
+
         for(int lotto:lottos){
             if(lotto==0) zero++;
         }
 
-        for(int win:win_nums){
-            if(Arrays.stream(lottos).anyMatch(n->n==win)){
+        for(int win_num:win_nums){
+            if(Arrays.stream(lottos).anyMatch(x->x==win_num)){
                 cnt++;
             }
         }
-        int hope;
-        switch (cnt+zero){
-            case 6:
-                hope=1;
-                break;
-            case 5:
-                hope=2;
-                break;
-            case 4:
-                hope=3;
-                break;
-            case 3:
-                hope=4;
-                break;
-            case 2:
-                hope=5;
-                break;
-            default:
-                hope=6;
-                break;
-        }
-        int real=hope+zero;
-        if(real>6) real=6;
 
-        int[] answer={hope,real};
+        int[] answer={map.get(cnt+zero),map.get(cnt)};
         return answer;
     }
 }
