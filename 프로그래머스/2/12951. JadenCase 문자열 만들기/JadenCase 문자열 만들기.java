@@ -1,22 +1,18 @@
 class Solution {
     public String solution(String s) {
-        String[] params = s.split(" ",-1);
-        StringBuilder result = new StringBuilder();
-        for(String param : params) {
-            if(!param.isEmpty()){
-                char c = param.charAt(0);
-                if(Character.isLetter(c)){
-                    result.append(Character.toUpperCase(c));
-                }else result.append(c);
+        StringBuilder sb = new StringBuilder();
+        String[] params = s.toLowerCase().split("");
+        boolean flag = true;
 
-                for(int i = 1; i < param.length(); i++){
-                    c = param.charAt(i);
-                    result.append(Character.toLowerCase(c));
-                }
+        for(String param : params) {
+            if(flag) {
+                sb.append(param.toUpperCase());
+            }else{
+                sb.append(param);
             }
-            result.append(" ");
+            flag = param.equals(" ");
         }
-        result.deleteCharAt(result.length()-1);
-        return result.toString();
+
+        return sb.toString();
     }
 }
