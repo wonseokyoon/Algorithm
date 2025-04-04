@@ -1,4 +1,5 @@
 import java.util.*;
+
 class Solution {
     public int solution(int k, int[] tangerine) {
         Arrays.sort(tangerine);
@@ -7,29 +8,19 @@ class Solution {
         for(int n:tangerine){
             map.put(n,map.getOrDefault(n,0) + 1);
         }
-        List<Map.Entry<Integer,Integer>> sortedMap = new ArrayList<>(map.entrySet());
-        sortedMap.sort(Map.Entry.comparingByValue());
 
-        Stack<Integer> stack = new Stack<>();
-        for(Map.Entry<Integer,Integer> entry:sortedMap){
-            stack.push(entry.getValue());
-        }
+        List<Integer> counts = new ArrayList<>(map.values());
+        counts.sort(Comparator.reverseOrder());
 
         int sum = 0;
         int cnt = 0;
-        int n;
-        while(true){
-            if(stack.isEmpty() || sum == k ){
-                break;
-            }
 
-            n = stack.peek();
-            sum += n;
-            cnt ++;
-            if(sum >= k){
+        for(int count:counts){
+            sum += count;
+            cnt++;
+            if(k<=sum){
                 break;
             }
-            stack.pop();
         }
 
         return cnt;
