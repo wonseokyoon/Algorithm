@@ -1,38 +1,30 @@
-import java.util.*;
+import java.util.HashSet;
 
 class Solution {
-public int[] solution(int n, String[] words) {
-        int row = 1;
-        int col = 1;
-        Map<String,Integer> map = new HashMap<>();
-        String prev = "0";
-        for(String word : words){
-            map.put(word,map.getOrDefault(word,0)+1);
-            // 끝말잇기가 실패했거나 단어가 두번 나온 경우
-            if(map.get(word)==2 || !checkWord(prev,word)){
-                return new int[]{col,row};
-            }
-            if(col == n){
-                row ++;
-                col-= n-1;
-                prev = word;
-                continue;
-            }
-            col ++;
-            prev = word;
-        }
-        return new int[]{0,0};
-    }
 
-    // 성공하면 true 반환
-    public boolean checkWord(String prev,String word) {
-        char end = prev.charAt(prev.length()-1);
-        char start = word.charAt(0);
-        if(end==start || end=='0'){
-            return true;
-        }else{
-            return false;
-        }
 
+    public int[] solution(int n, String[] words) {
+      int[] answer = { 0, 0 };
+        char chEnd = words[0].charAt(words[0].length() - 1);
+        char chStart;
+        System.out.print(chEnd + " ");
+        HashSet<String> log = new HashSet<>();
+        log.add(words[0]);
+        for (int i = 1; i < words.length; i++) {
+            chStart = words[i].charAt(0);
+            log.add(words[i]);
+            if (chEnd != chStart || log.size() != i + 1) {
+                System.out.print(i + 1 + "!");
+                answer[0] = (i % n)+1;
+                answer[1] = (i / n) + 1;
+                break;
+            }
+
+            chEnd = words[i].charAt(words[i].length() - 1);
+            System.out.print(chEnd + " ");
+        }
+        System.out.println();
+        System.out.println("(" + answer[0] + ", " + answer[1] + ")");
+        return answer;
     }
 }
