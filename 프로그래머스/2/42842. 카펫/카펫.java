@@ -1,20 +1,9 @@
-import java.util.Arrays;
-
+import java.util.*;
 class Solution {
-        public int[] solution(int brown, int yellow) {
-        int sum = brown + yellow;
-        int sqrt = (int) Math.sqrt(sum);
-        int width;
-        int height = 0;
-        for(int i = 3 ; i<= sqrt; i++){
-            if(sum % i == 0){
-                if((i-2) * ((sum / i) - 2) == yellow){
-                    height = i;
-                }
-            }
-        }
-        width = sum / height;
-
-        return new int[] {width,height};
+    public int[] solution(int brown, int red) {
+        int a = (brown+4)/2;
+        int b = red+2*a-4;
+        int[] answer = {(int)(a+Math.sqrt(a*a-4*b))/2,(int)(a-Math.sqrt(a*a-4*b))/2};
+        return answer;
     }
 }
