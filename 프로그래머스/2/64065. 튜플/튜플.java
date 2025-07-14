@@ -1,20 +1,21 @@
 import java.util.*;
 class Solution {
     public int[] solution(String s) {
-        String trimmed = s.substring(2, s.length() - 2);
-        String[] param = trimmed.split("},\\{");
+        String[] arr = s.replaceAll("\\{"," ")
+                .replaceAll("\\}"," ")
+                .trim()
+                .split(" , ");
 
-        Arrays.sort(param,(a,b) -> Integer.compare(a.length(), b.length()));
+        Arrays.sort(arr, (a,b) -> Integer.compare(a.length(), b.length()));
 
-        LinkedHashSet<Integer> nums = new LinkedHashSet<>();
-        for(int i = 0; i < param.length; i++){
-            String[] num = param[i].split(",");
-            for(int j = 0; j < num.length; j++){
-                nums.add(Integer.parseInt(num[j]));
+        LinkedHashSet<Integer> set = new LinkedHashSet<>();
+        for(String str : arr){
+            for(String num:str.split(",")){
+                set.add(Integer.parseInt(num));
             }
         }
 
-        ArrayList<Integer> list = new ArrayList<>(nums);
-        return list.stream().mapToInt(Integer::intValue).toArray();
+        LinkedList<Integer> list = new LinkedList<>(set);
+        return list.stream().mapToInt(i->i).toArray();
     }
 }
