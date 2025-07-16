@@ -1,15 +1,26 @@
 import java.util.*;
 class Solution {
-    public int solution(String str1, String str2) {
+public int solution(String str1, String str2) {
         // 대소문자 구분 x
         str1 = str1.toLowerCase();
         str2 = str2.toLowerCase();
 
-        // str1의 부분 문자열을 저장 할 배열
-        ArrayList<String> strArr1 = new ArrayList<>();
+        ArrayList<String> strArr1 = extractSubStringArray(str1);
+        ArrayList<String> strArr2 = extractSubStringArray(str2);
+
+        int interCnt = intersection(strArr1,strArr2);
+        int unionCnt = union(strArr1,strArr2);
+
+        if(unionCnt==0) return 65536;
+        return (int) Math.floor((double) interCnt / unionCnt * 65536);
+    }
+
+    private ArrayList<String> extractSubStringArray(String str) {
+        ArrayList<String> strArr = new ArrayList<>();
         String subString;
-        for(int i=0; i<str1.length()-1; i++) {
-            subString = str1.substring(i, i+2);
+
+        for(int i=0; i<str.length()-1; i++) {
+            subString = str.substring(i, i+2);
             // 특수문자가 체크
             boolean flag = true;
             for(char c : subString.toCharArray()) {
@@ -19,30 +30,9 @@ class Solution {
                 }
             }
             // 특수문자가 없는 경우만 추가
-            if(flag) strArr1.add(subString);
+            if(flag) strArr.add(subString);
         }
-        // str2의 부분 문자열을 저장 할 배열
-        ArrayList<String> strArr2 = new ArrayList<>();
-        for(int i=0; i<str2.length()-1; i++) {
-            subString = str2.substring(i, i+2);
-            // 특수문자가 체크
-            boolean flag = true;
-            for(char c : subString.toCharArray()) {
-                if(!Character.isLetter(c)){
-                    flag = false;
-                    break;
-                }
-            }
-            if(flag) strArr2.add(subString);
-        }
-
-        int interCnt = intersection(strArr1,strArr2);
-        int unionCnt = union(strArr1,strArr2);
-        if(unionCnt==0) return 65536;
-
-        double jakad = (double) interCnt / unionCnt;
-
-        return (int) Math.floor(jakad * 65536);
+        return strArr;
     }
 
     // 교집합 갯수 확인
