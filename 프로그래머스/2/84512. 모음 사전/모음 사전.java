@@ -3,17 +3,9 @@ class Solution {
     String[] word = {"A","E","I","O","U"};
     ArrayList<String> dic = new ArrayList<>();
 
-    public int solution(String words) {
+        public int solution(String words) {
         BruteForceSearch(words,"");
-
-        int cnt = 0;
-        for(String s : dic){
-            System.out.println(s);
-            if(s.equals(words)) return cnt;
-            cnt++;
-        }
-
-        return cnt;
+        return dic.indexOf(words);
     }
 
     private void BruteForceSearch(String words, String cur) {
