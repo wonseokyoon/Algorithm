@@ -1,38 +1,31 @@
 import java.util.*;
 class Solution {
-public int[] solution(int[] numbers) {
+    public int[] solution(int[] numbers) {
         int[] answer = new int[numbers.length];
-        for(int i = 0; i < numbers.length; i++) {
-            answer[i] = -1;
-        }
+        Arrays.fill(answer, -1);    // -1로 채움
 
-        Stack<int[]> stack = new Stack<>();
+        Stack<Integer> stack = new Stack<>();
+        stack.push(0);
 
-        for(int i = 0; i < numbers.length; i++) {
-            int num = numbers[i];
-            // 스택이 비어있는 경우
-            if(stack.isEmpty()) {
-                stack.push(new int[]{i, num});  //  인덱스 번호와 원소 같이 저장: [0,2]
-                continue;
-            }
+        for(int i = 1; i < numbers.length; i++) {
+            while (!stack.isEmpty()) {
+                int idx = stack.peek();
 
-            int idx = stack.peek()[0];
-            int peek = stack.peek()[1];
-
-            // 스택이 비어있지 않고, 새로운 값이 더 큰 경우
-            while (!stack.isEmpty() && peek < num){
-                answer[idx] = num;     // num 저장
-                stack.pop();
-                if(!stack.isEmpty()) {
-                    idx = stack.peek()[0];  // idx 업데이트
-                    peek = stack.peek()[1]; // peek 업데이트
+                // 뒤의 수가 더 큰 경우
+                if(numbers[idx] < numbers[i]) {
+                    // 뒤의 값 저장
+                    answer[idx] = numbers[i];
+                    stack.pop();    // 기존 값 제거
+                } else{
+                    // 뒤의 값 푸시
+                    stack.push(i);
+                    break;
                 }
             }
+            stack.push(i);  // 새로운 값 추가
 
-            stack.push(new int[]{i, num});
         }
-
-
+        
         return answer;
     }
 }
