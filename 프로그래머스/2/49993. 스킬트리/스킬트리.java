@@ -24,7 +24,6 @@ class Solution {
             if(isValid) {
                 answer++;
             }
-
         }
         return answer;
     }
