@@ -1,30 +1,18 @@
 import java.util.*;
 class Solution {
     public int solution(String skill, String[] skill_trees) {
-        int answer = 0;
-        for(int i = 0; i < skill_trees.length; i++) {
-            int index = 0;
-            boolean isValid = true;
+       ArrayList<String> list = new ArrayList<>(Arrays.asList(skill_trees));
+       Iterator<String> iterator = list.iterator();
 
-            for(char c: skill_trees[i].toCharArray()) {
-                // 현재 문자의 스킬 순서 체크
-                int check = skill.indexOf(c);
-                // 선행 스킬에 포함되지 않는 경우
-                if(check == -1) {
-                    continue;
-                }
+       while(iterator.hasNext()) {
+           // 스킬 순서에 등록된 스킬 제외 전부 지움
+           String filtered = iterator.next().replaceAll("[^"+skill+"]","");
+           // 순서대로 안나오면 지움
+           if(skill.indexOf(filtered) != 0){
+               iterator.remove();
+           }
+       }
 
-                if(index != check){
-                    isValid = false;
-                    break;
-                }
-                index++;
-            }
-
-            if(isValid) {
-                answer++;
-            }
-        }
-        return answer;
+       return list.size();
     }
 }
