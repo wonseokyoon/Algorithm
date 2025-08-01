@@ -1,18 +1,14 @@
 class Solution {
-    public String solution(String s) {
-        StringBuilder sb = new StringBuilder();
-        String[] params = s.toLowerCase().split("");
+     public String solution(String s) {
+        String answer = "";
+        String[] sp = s.toLowerCase().split("");
         boolean flag = true;
 
-        for(String param : params) {
-            if(flag) {
-                sb.append(param.toUpperCase());
-            }else{
-                sb.append(param);
-            }
-            flag = param.equals(" ");
+        for(String ss : sp) {
+            answer += flag ? ss.toUpperCase() : ss;
+            flag = ss.equals(" ") ? true : false;
         }
 
-        return sb.toString();
-    }
+        return answer;
+  }
 }
