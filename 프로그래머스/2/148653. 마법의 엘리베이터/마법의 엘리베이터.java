@@ -1,45 +1,17 @@
 class Solution {
-public int solution(int storey) {
-        String str = String.valueOf(storey);
-        int len = str.length();
+    public int solution(int storey) {
         int cnt = 0;
+        while (storey > 0) {
+            int digit = storey % 10;    // 현재 자리
+            int nextDigit = (storey % 100) / 10;    // 다음 자리
 
-        int[] storeys = new int[str.length()];
-        for (int i = 0; i < len; i++) {
-            storeys[i] = str.charAt(i) - '0';
-        }
-
-
-        for (int i = len - 1; i > 0; i--) {
-            int num = storeys[i];
-
-            if (num < 5) {            // 내림
-                cnt += num;
-            } else if (num > 5) {   // 올림
-                if(num == 10){
-                    storeys[i-1]++;
-                    continue;
-                }
-                cnt += 10 - num;
-                storeys[i - 1]++;     // 올림 처리
-            } else {
-                if (storeys[i - 1] >= 5) {      // 다음 자릿수가 5 이상이면 올림
-                    storeys[i - 1]++;     // 올림 처리
-                }
-                // 4이하면 내림 처리
-                cnt += 5;
+            if (digit > 5 || digit == 5 && nextDigit >= 5) {  // 올림
+                cnt += 10 - digit;
+                storey += 10;
+            } else {     // 내림
+                cnt += digit;
             }
-        }
-
-        int num = storeys[0];   // 맨 앞자리
-        if (num <= 5) {            // 내림
-            cnt += num;
-        } else {   // 올림
-            if(num == 10){
-                cnt ++ ;
-            }else{
-                cnt += 10 - num + 1;
-            }
+            storey /= 10;
         }
 
         return cnt;
