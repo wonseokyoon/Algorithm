@@ -1,29 +1,51 @@
 import java.util.*;
-class Solution {
-    public int solution(String[] want, int[] number, String[] discount) {
 
-        Map<String,Integer> map = new HashMap<>();
-        for(int i=0;i<want.length;i++){
-            map.put(want[i],map.getOrDefault(want[i],0)+number[i]);
+class Solution {
+    static HashMap<String, Integer> wishList;
+    static HashMap<String, Integer> map;
+    public int solution(String[] want, int[] number, String[] discount) {
+        wishList = new HashMap<>();
+        map = new HashMap<>();
+
+        for(int i=0; i<want.length; i++){
+            wishList.put(want[i], number[i]);
         }
-        int ans = 0;
-        for(int start=0; start <= discount.length-10; start++){
-            // 임시 맵
-            Map<String,Integer> temp = new HashMap<>(map);
-            int i;
-            for(i = 0; i < 10; i++){
-                int index = i + start;
-                temp.put(discount[index],temp.getOrDefault(discount[index],0)-1);
-                // 할인 품목중에 살게 없거나, 마지막 인덱스에 도착했을 경우
-                if(temp.get(discount[index])<0){
-                    break;
-                }
+
+        for(int i=0; i<10; i++){
+            if(map.containsKey(discount[i])){
+                map.put(discount[i], map.get(discount[i])+1);
+            } else {
+                map.put(discount[i], 1);
+            }
+        }
+
+        int answer = 0;
+
+        if(want()) answer++;
+
+        if(discount.length==10) return answer;
+
+        for(int i=10; i<discount.length; i++){
+            map.put(discount[i-10], map.get(discount[i-10])-1);
+
+            if(map.containsKey(discount[i])){
+                map.put(discount[i], map.get(discount[i])+1);
+            } else {
+                map.put(discount[i], 1);
             }
 
-            // 10일 연속 할인 상품 다 산 경우
-            if(i==10) ans++;
+            if(want()) answer++;
         }
-        return ans;
+
+        return answer;
     }
 
+    private boolean want(){
+
+        for(String key : wishList.keySet()){
+            if(map.get(key) != wishList.get(key)) return false;
+        }
+
+        return true;
+    }
 }
