@@ -1,57 +1,44 @@
 import java.util.*;
-
 class Solution {
-    // 상 하 좌 우
-    int[] dx = {0,0,-1,1};
-    int[] dy = {-1,1,0,0};
+    int[] dx = {-1,1,0,0};
+    int[] dy = {0,0,1,-1};
     
     public int solution(String[] maps) {
-        int[] start = new int[2];
-        int[] lever = new int[2];
-        int[] exit = new int[2];
-        
         int row = maps.length;
         int col = maps[0].length();
         
-        for(int i =0; i < row;i ++){
-            for(int j = 0; j<col;j++){
-                char c = maps[i].charAt(j);
-                // 시작 지점
-                if(c =='S'){
-                    start = new int[]{i,j};
-                }else if(c == 'E'){
-                    exit = new int[]{i,j};
-                } else if(c=='L'){
+        int[] start = new int[2];
+        int[] exit = new int[2];
+        int[] lever = new int[2];
+
+        for(int i=0;i<row;i++){
+            for(int j=0;j<col;j++){
+                if(maps[i].charAt(j) == 'S'){
+                    start = new int[]{i,j};    
+                } else if(maps[i].charAt(j) == 'L'){
                     lever = new int[]{i,j};
+                } else if(maps[i].charAt(j) == 'E'){
+                    exit = new int[]{i,j};
                 }
             }
         }
         
-        // start -> lever 거리
         int startToLever = bfs(start,lever,maps);
-        if(startToLever == -1){
-            return -1;
-        }
-
-        // lever -> exit 거리
-        int LeverToExit = bfs(lever,exit,maps);
-        if(LeverToExit == -1){
-            return -1;
-        }
+        if(startToLever == -1) return -1;
+        int leverToExit = bfs(lever,exit,maps);
+        if(leverToExit == -1) return -1;
         
-        return startToLever + LeverToExit;
+        return leverToExit + startToLever;        
     }
     
-    int bfs(int[] start,int end[], String[] maps){
+    int bfs(int[] start, int[] end, String[] maps){
         int row = maps.length;
         int col = maps[0].length();
-        // 현재 위치, 시간
+        
         Queue<int[]> queue = new LinkedList<>();
         boolean[][] visited = new boolean[row][col];
         
-        // 초기 위치
-        queue.add(new int[]{start[0],start[1],0});
-        visited[start[0]][start[1]] = true;
+        queue.add(new int[] {start[0], start[1], 0});
         
         while(!queue.isEmpty()){
             int[] cur = queue.poll();
@@ -59,13 +46,11 @@ class Solution {
             int curY = cur[1];
             int time = cur[2];
             
-            // 도착
             if(curX == end[0] && curY == end[1]){
                 return time;
             }
             
-            // 모든 방향 체크
-            for(int i=0;i<4;i++){
+            for(int i = 0; i< 4 ; i++){
                 int nextX = curX + dx[i];
                 int nextY = curY + dy[i];
                 
@@ -74,12 +59,8 @@ class Solution {
                     visited[nextX][nextY] = true;
                     queue.add(new int[]{nextX,nextY,time+1});
                 }
-            }         
+            }    
         }
-        
         return -1;
     }
-    
-    
-    
 }
