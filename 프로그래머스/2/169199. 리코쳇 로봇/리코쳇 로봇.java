@@ -1,64 +1,73 @@
 import java.util.*;
-
 class Solution {
-    int[] dx = {-1, 1, 0, 0};  // 상하좌우 이동을 위한 배열
-    int[] dy = {0, 0, -1, 1};
-    int n, m;  // 보드의 크기
-
+    int[] dx = {-1,1,0,0};
+    int[] dy = {0,0,-1,1};
+    int row;
+    int col;
+    boolean[][] visited;
+    
     public int solution(String[] board) {
-        n = board.length;
-        m = board[0].length();
-        int[] start = new int[2];
-        int[] goal = new int[2];
-
-        // 시작 위치와 목표 위치 찾기
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (board[i].charAt(j) == 'R') {
-                    start[0] = i;
-                    start[1] = j;
-                } else if (board[i].charAt(j) == 'G') {
-                    goal[0] = i;
-                    goal[1] = j;
+        row = board.length;
+        col = board[0].length();
+        visited = new boolean[row][col];
+        
+        for(int i = 0;i < row; i++){
+            String str = board[i];
+            for(int j = 0; j < col; j++){
+                char ch = str.charAt(j);
+                int[] start = new int[2];
+                start = new int[]{i,j};
+                if(ch == 'R'){
+                    // bfs 로 최단거리 계산
+                    int cnt = bfs(board,start);
+                    return cnt;
                 }
             }
         }
-
-        return bfs(board, start, goal);
+        
+        return -1;
     }
-
-    private int bfs(String[] board, int[] start, int[] goal) {
+    
+    int bfs(String[] board, int[] start) {
         Queue<int[]> queue = new LinkedList<>();
-        boolean[][] visited = new boolean[n][m];
-        queue.offer(new int[]{start[0], start[1], 0});  // x, y, 이동 횟수
         visited[start[0]][start[1]] = true;
-
-        while (!queue.isEmpty()) {
+        
+        // [x좌표,y좌표,이동 횟수]
+        queue.offer(new int[]{start[0],start[1],0});
+        
+        while(!queue.isEmpty()){
             int[] current = queue.poll();
-            int x = current[0], y = current[1], moves = current[2];
-
-            if (x == goal[0] && y == goal[1]) {
-                return moves;
+            int currentX = current[0];
+            int currentY = current[1];
+            int cnt = current[2];
+            
+            // System.out.println("현재 위치: " + currentX+","+currentY);
+            
+            // 도착
+            if(board[currentX].charAt(currentY) == 'G') {
+                return cnt;
             }
-
-            for (int i = 0; i < 4; i++) {
-                int nx = x, ny = y;
-                // 해당 방향으로 끝까지 이동
-                while (nx >= 0 && nx < n && ny >= 0 && ny < m && board[nx].charAt(ny) != 'D') {
-                    nx += dx[i];
-                    ny += dy[i];
+            
+            // 모든 방향 탐색
+            for(int i=0;i<4;i++){
+                int nextX = currentX +dx[i];
+                int nextY = currentY +dy[i];
+                
+                // 격자 범위 이내 & 끝까지 이동
+                while(nextX >= 0 && nextX <row && nextY >= 0 && nextY <col 
+                      && board[nextX].charAt(nextY) != 'D') {
+                    nextX += dx[i];
+                    nextY += dy[i];
                 }
-                // 벽이나 장애물 직전 위치로 이동
-                nx -= dx[i];
-                ny -= dy[i];
-
-                if (!visited[nx][ny]) {
-                    visited[nx][ny] = true;
-                    queue.offer(new int[]{nx, ny, moves + 1});
+                // 직전 위치
+                nextX -= dx[i];
+                nextY -= dy[i];
+                if(!visited[nextX][nextY]) {                // 처음 와본 정지구역
+                    queue.offer(new int[]{nextX,nextY, cnt+1});    // 위치 저장
+                    visited[nextX][nextY] = true;           // 방문 처리
                 }
             }
         }
-
-        return -1;  // 목표에 도달할 수 없는 경우
+        return -1;        
     }
 }
