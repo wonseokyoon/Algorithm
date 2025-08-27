@@ -1,22 +1,26 @@
 import java.util.*;
 class Solution {
-    public int solution(int n, int k, int[] enemy) {
-        // 우선 순위 큐 사용
+    public int solution(int n, int k, int[] enemies) {
+        // 우선순위 큐를 사용하여 무적권 사용 컨트롤
         PriorityQueue<Integer> pq = new PriorityQueue<>();
-        int cnt =0;
-        for(int number : enemy){
-            // 일단 무적권 사용 가정
-            pq.offer(number);
+        
+        int round = 0;
+        for(int enemy:enemies){
+            // 무적권 사용해서 막았다고 가정
+            pq.offer(enemy);
             
-            // 무적권 횟수 초과 사용
-            if(pq.size() > k) {
-                int min = pq.poll();    // 지금까지 사용한 무적권에서 가장 적은 수
-                n-=min;                 // 이건 직접 막음
+            // 무적권 사용 횟수 초과 -> 최소 침입은 몸빵
+            if(pq.size() > k){
+                int minNumber = pq.poll();
+                n-=minNumber;
             }
-            if(n<0) return cnt;     // 못막아
-            cnt++;
+            
+            // 못막아
+            if(n < 0) return round;
+            
+            round++;
         }
         
-        return enemy.length;
+        return enemies.length;
     }
 }
