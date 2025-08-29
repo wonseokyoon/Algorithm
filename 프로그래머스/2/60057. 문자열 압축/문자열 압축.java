@@ -2,56 +2,45 @@ import java.util.*;
 
 class Solution {
     public int solution(String s) {
-        int strLen = s.length();
-        if(strLen == 1) return 1;
-        int maxLen = strLen/2;
+        int strLen = s.length();            // 문자열 길이
+        int compressedMaxLen = strLen/2;    // 최대 압축 길이
         
-        int answer = Integer.MAX_VALUE;
+        if(strLen == 1) return 1;            // 문자열 길이가 1이면 바로 반환
         
-        // 문자열을 len으로 압축했을때 문자열 길이를 구함
-        for(int len = 1; len <= maxLen; len++){
-            int zippedLen = zip(len,s);     // 압축 문자열 길이
-            if(zippedLen < answer){
-                answer = zippedLen;
-            }
+        int minLen = Integer.MAX_VALUE;     // 최솟값
+        // 1부터 시작해서 최대 압축 길이까지 전부 압축 해보고 최솟값을 구함
+        for(int compressedLen = 1; compressedLen<= compressedMaxLen; compressedLen++) {
+            int len = compress(compressedLen, s);     // 압축 후 최솟값
+            if(len < minLen) minLen = len;
         }
-        
-        return answer;
+        return minLen;
     }
     
-    // 문자열 s를 길이 len으로 압축한 길이
-    int zip(int len, String s) {
-        // 압축 문자열 저장 스트링빌더
-        StringBuilder stringBuilder = new StringBuilder();
-        
-        // 문자열의 시작 지점        
-        for(int i = 0; i< s.length();){
-            // len 단위로 자름
-            int endIdx = Math.min(i + len,s.length());
-            String currentString = s.substring(i,endIdx);
+    int compress(int compressedLen, String s) {
+        StringBuilder stringBuilder = new StringBuilder();  // 문자열을 저장
+        // 0부터 시작
+        for(int i = 0 ; i < s.length();){
+            int endIdx = Math.min(s.length(), i + compressedLen);   // 범위 초과 방지
+            String current = s.substring(i,endIdx);
+
+            int nextIdx = endIdx;
             int cnt = 1;
-
-            int next = i + len; // 다음 문자열
-            while(next < s.length()){
-                int nextEndIdx = Math.min(next + len , s.length());
-                String nextString = s.substring(next,nextEndIdx);
-
-                if(nextString.equals(currentString)){
-                    cnt ++;
-                    next+= len;  // 다음 위치 
-                } else{
-                    break;  // 종료
+            while(nextIdx < s.length()) {
+                int nextEndIdx = Math.min(s.length(), nextIdx + compressedLen);   // 범위 초과 방지
+                String next = s.substring(nextIdx,nextEndIdx);
+            
+                if(next.equals(current)){
+                    cnt++;
+                    nextIdx += compressedLen;
                 }
+                else break;
             }
-
-            // 겹치는 문자열이 있었던 경우
-            if(cnt > 1){
-                stringBuilder.append(cnt);
-            }
-            stringBuilder.append(currentString);
-            i=next;
+            
+            if(cnt > 1) stringBuilder.append(cnt);
+            stringBuilder.append(current);
+            
+            i = nextIdx;    // i값을 재설정
         }
-        
         return stringBuilder.length();
     }
 }
