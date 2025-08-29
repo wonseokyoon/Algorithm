@@ -1,27 +1,24 @@
 import java.util.*;
 class Solution {
     ArrayList<int[]> list = new ArrayList<>();
-    
     public int[][] solution(int n) {
-        hanoi(n,1,2,3);        
         
-        return list.toArray(new int[0][]);
+        hanoi(n,1,2,3);
+        return list.toArray(new int[0][]);        
     }
     
-    void hanoi(int num, int start, int via, int end){
-        if(num == 1){
-            list.add(new int[] {start,end});
+    void hanoi(int n, int start, int via, int to) {
+        if(n == 1){
+            list.add(new int[] {start,to});
             return;
         }
         
-        // 가장 큰 원반 제외, 모든 원반을 start -> via로 이동
-        hanoi(num-1, start,end,via);
-        // 가장 큰 원반을 start -> end로 이동
-        list.add(new int[] {start,end});
-        // 나머지 원반을 via -> end로 이동
-        hanoi(num-1, via,start,end);
-        
-        
+        // 1~n-1 의 원판: start -> via
+        hanoi(n-1,start,to,via);
+        // n: start -> to
+        list.add(new int[] {start,to});
+        // 1~n-1 의 원판: via -> to
+        hanoi(n-1,via,start,to);
     }
     
 }
