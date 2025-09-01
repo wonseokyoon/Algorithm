@@ -1,24 +1,51 @@
 import java.util.*;
 class Solution {
-    public int solution(int[] priorities, int location) {
-        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());    // 우선순위 큐(역순)
-        int cnt = 0;
-        for(int num : priorities){
-            pq.add(num);    // 큐에 값 등록
+    class Status {
+        int priority;
+        int location;
+        
+        public Status(int priority, int location){
+            this.priority = priority;
+            this.location = location;
         }
-
-        while (!pq.isEmpty()) {
-            for(int i=0; i<priorities.length;i++){
-                if(pq.peek() == priorities[i]){
-                    pq.poll();
-                    cnt++;
-
-                    if(location == i){
-                        return cnt;
-                    }
-                }
+        
+        @Override
+        public String toString(){
+            return "[" + priority + "," + location +"]";
+        }
+    }
+    
+    public int solution(int[] priorities, int location) {
+        Queue<Status> queue = new LinkedList<>();
+        List<Integer> list = new ArrayList<>();
+        int i = 0;
+        for(int priority : priorities){
+            Status status = new Status(priority,i++);
+            queue.offer(status);
+            list.add(priority);
+        }
+        
+        // 정렬
+        Collections.sort(list,Collections.reverseOrder());
+        
+        int cnt = 1;
+        while(!queue.isEmpty()){
+            Status status = queue.poll();
+            int priority = status.priority;
+            int idx = status.location;
+            int target = list.get(0);
+            
+            if(target == priority) {
+                list.remove(0);    // 삭제
+                if(location == idx) return cnt;
+                cnt ++;
+            } else{
+                queue.offer(status);
             }
         }
-        return cnt;
+        
+        
+        int answer = 0;
+        return answer;
     }
 }
