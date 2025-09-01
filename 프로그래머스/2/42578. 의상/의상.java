@@ -1,20 +1,22 @@
 import java.util.*;
 class Solution {
-public int solution(String[][] clothes) {
-        Map<String,Integer> map = new HashMap<>();
-        // 종류별로 그룹화 , 기본값:1(아무것도 안입는 경우 포함: +1)
-        for(int i=0;i<clothes.length;i++){
-            String category = clothes[i][1];
-            map.put(category,map.getOrDefault(category,1)+1);
+    HashMap<String,Integer> map = new HashMap<>();
+    public int solution(String[][] clothes) {
+        for(String[] cloth: clothes){
+            String type = cloth[1];     // 의상 종류
+            // 의상 종류 별 가짓수 기록
+            map.put(type,map.getOrDefault(type,0) +1);
         }
-
-        int answer = 1;
-        for(int num:map.values()){
-            answer *= num;
+        
+        int[] number = new int[map.size()];
+        int idx = 0;
+        int total = 1;
+        for(String key : map.keySet()){
+            int value = map.get(key);
+            number[idx++] = value;
+            total *= value + 1;
         }
-
-        // 모든 종류의 옷을 안입는 경우 -1
-        answer--;
-        return answer;
+        
+        return total-1;
     }
 }
