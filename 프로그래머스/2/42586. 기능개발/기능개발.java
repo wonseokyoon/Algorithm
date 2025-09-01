@@ -1,35 +1,33 @@
 import java.util.*;
 class Solution {
-public int[] solution(int[] progresses, int[] speeds) {
-        int size = progresses.length;
-        int[] remains = new int[size];
-
-        for(int i = 0; i < size; i++){
+    public int[] solution(int[] progresses, int[] speeds) {
+        Queue<Integer> queue = new LinkedList<>();
+        for(int i = 0; i< speeds.length; i++){
+            int progress = progresses[i];
             int speed = speeds[i];
-            int remain = (100 - progresses[i]);
-            if(remain % speed == 0){
-                remains[i] = remain/speed;
-            }else {
-                remains[i] = remain/speed + 1;
-            }
             
-        }
-
-        ArrayList<Integer> result = new ArrayList<>();
-        int prev = -1;
-        Map<Integer, Integer> map = new HashMap<>();
-        for(int remain:remains){
-            if(remain > prev) {
-                map.put(remain, map.getOrDefault(remain, 0) + 1);
-                if(prev != -1 ) result.add(map.get(prev));
-                prev = remain;
+            int day = 0;
+            while(progress < 100){
+                progress += speed;
+                day ++;
             }
-            else map.put(prev, map.getOrDefault(prev, 0) +1);
+            queue.offer(day);
         }
-        result.add(map.get(prev));
-
-        return result.stream()
-                .mapToInt(Integer::intValue)
-                .toArray();
+        
+        List<Integer> answer = new ArrayList<>();
+        int standard = queue.poll(); // 기준 값
+        int cnt = 1;
+        while(!queue.isEmpty()){
+            if(standard < queue.peek()) {
+                standard = queue.poll();
+                answer.add(cnt);
+                cnt = 1;    // cnt 초기화
+            } else{
+                queue.poll();
+                cnt ++;
+            }            
+        }
+        answer.add(cnt);
+        return answer.stream().mapToInt(Integer::intValue).toArray();
     }
 }
