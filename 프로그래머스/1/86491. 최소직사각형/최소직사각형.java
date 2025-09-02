@@ -8,11 +8,8 @@ class Solution {
         
         for(int[] size : sizes){
             // 무조건 가로가 더 길게 배치
-            int width = Math.max(size[0],size[1]);
-            int height = Math.min(size[0],size[1]);
-            
-            if(width > maxW) maxW = width;
-            if(height > maxH) maxH = height;
+            maxW = Math.max(Math.max(size[0],size[1]),maxW);
+            maxH = Math.max(Math.min(size[0],size[1]),maxH);
         }
         return maxW * maxH;
     }
