@@ -1,33 +1,33 @@
 import java.util.*;
 class Solution {
     public int[] solution(String[] operations) {
-        // 오름차순 우선순위 큐
-        PriorityQueue<Integer> ascPq = new PriorityQueue<>();
-        // 내림차순 우선순위 큐
-        PriorityQueue<Integer> descPq = new PriorityQueue<>((a,b) -> b-a);
+        PriorityQueue<Integer> apq = new PriorityQueue<>();     // 오름차순
+        PriorityQueue<Integer> dpq = new PriorityQueue<>((a,b) -> b - a);   // 내림차순
         
         int size = 0;
-        for(String operation: operations){
-            String[] params = operation.split(" ");
-            String command = params[0]; // 명령어
-            String number = params[1];  // 숫자
-            if(command.equals("I")){   // 삽입 명령어
-                ascPq.offer(Integer.parseInt(number));
-                descPq.offer(Integer.parseInt(number));
+        
+        for(String operation : operations){
+            String command = operation.split(" ")[0];
+            String numStr = operation.split(" ")[1];
+            
+            if(command.equals("I")){
+                int num = Integer.parseInt(numStr);
+                apq.offer(num);
+                dpq.offer(num);
                 size ++;
-            } else {    // 삭제 명령어
+            } else{
                 if(size > 0){
-                    if(number.equals("-1")) {   // 최솟값 삭제
-                        descPq.remove(ascPq.poll());
+                    if(numStr.equals("-1")) {  // 최솟값 삭제
                         size --;
-                    } else {        // 최댓값 삭제
-                        ascPq.remove(descPq.poll());
+                        dpq.remove(apq.poll());
+                    } else { // 최댓값 삭제
                         size --;
+                        apq.remove(dpq.poll());
                     }
                 }
             }
         }
-        if(size  == 0) return new int[]{0,0};
-        return new int[]{descPq.poll(),ascPq.poll()};
+        if(size == 0) return new int[] {0,0};        
+        return new int[] {dpq.poll(), apq.poll()};
     }
 }
