@@ -24,9 +24,7 @@ class Solution {
                 }
             }
             if(cnt >= hIdx) return hIdx;
-            else{
-                hIdx --;
-            }
+            hIdx --;
         }
         return 0;
     }
