@@ -2,29 +2,28 @@ import java.util.*;
 
 class Solution {
     public int solution(int[] scoville, int K) {
-        PriorityQueue<Integer> scovilleHeap = new PriorityQueue<>();
+        // 맵기를 기준으로 오름차순 정렬
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a,b) -> a - b);
         
-        for(int num : scoville){
-            scovilleHeap.offer(num);
+        for(int s : scoville){
+            pq.offer(s);
         }
-
-        int count = 0;
-
-        while (scovilleHeap.size() > 1) {
-            // 모든 스코빌 지수가 K 이상이면
-            if(scovilleHeap.peek() >= K) break;
-
-            // 맨 앞 두개 원소 꺼내서 계산
-            int newScoville = scovilleHeap.poll() + scovilleHeap.poll() * 2;
-
-            // 새로운 인덱스 삽입
-            scovilleHeap.offer(newScoville);
-
-            count++;
+        
+        int answer = 0;
+        // 모든 음식이 K를 넘을때까지 반복
+        while(pq.peek() < K && pq.size() > 1) {
+            int k1 = pq.poll();
+            int k2 = pq.poll();
+            
+            int newK = k1 + (k2 * 2);
+            answer ++;          // 횟수 추가
+            pq.offer(newK);     // 새로 만든 맵기 추가
         }
-
-        if(scovilleHeap.peek() >= K) return count;
-        return -1;
+        
+        if(pq.peek() < K) { // 못만든 경우
+            return -1;
+        } else{
+            return answer;
+        }
     }
-
 }
