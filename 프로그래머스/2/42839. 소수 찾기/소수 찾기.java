@@ -1,52 +1,46 @@
 import java.util.*;
+
 class Solution {
-// 중복 방지
-    Set<Integer> set = new HashSet<>();
-    boolean[] visited;
+    HashSet<Integer> set = new HashSet<>();
     public int solution(String numbers) {
-        char[] num = numbers.toCharArray();
-        visited = new boolean[num.length];
+        char[] nums = numbers.toCharArray();
+        boolean[] visited = new boolean[nums.length];
+        // 완전 탐색으로 숫자를 만듬
+        dfs("",nums,visited);
 
-        for(int i =1 ; i <= num.length ; i++){
-            premutation(num,"",i);
-        }
-
-        int count = 0;
-        for(int number: set){
-            if(isPrime(number)){
-                count++;
+        int answer = 0;
+        for(int num : set){
+            if(isPrime(num)){
+                answer ++;
             }
         }
-
-        return count;
+        
+        return answer;
     }
-
-    private boolean isPrime(int number) {
-        if(number<=1){
-            return false;
-        }
-        for(int i=2 ; i <= Math.sqrt(number) ; i++){
-            if(number % i == 0){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private void premutation(char[] num, String current, int maxLength) {
-        if(current.length() == maxLength) {
+    
+    public void dfs(String current, char[] nums, boolean[] visited){
+        // set에 등록
+        if(!current.equals("")){
             set.add(Integer.parseInt(current));
-            return;
         }
-
-        for(int i = 0 ; i < num.length ; i++){
-            if(visited[i] == false){
+        
+        for(int i = 0; i<nums.length;i++){
+            // 아직 사용 안 한 숫자
+            if(!visited[i]){
                 visited[i] = true;
-                premutation(num,current + num[i],maxLength);
+                dfs(current+nums[i],nums,visited);
                 visited[i] = false;
             }
         }
-
-
+    }
+    
+    public boolean isPrime(int num){
+        if(num < 2) return false;
+        
+        for(int i = 2; i <= Math.sqrt(num); i++){
+            if(num % i == 0) return false;
+        }
+        
+        return true;
     }
 }
