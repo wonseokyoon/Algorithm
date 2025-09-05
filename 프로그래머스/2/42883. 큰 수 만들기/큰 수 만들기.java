@@ -1,29 +1,33 @@
-import java.util.Stack;
+import java.util.*;
 
 class Solution {
     public String solution(String number, int k) {
-        Stack<Character> stack = new Stack<>();
-        for(char num : number.toCharArray()) {
-            // 뒤에 숫자가 더 큰 경우
-            while(!stack.empty() && k > 0 && stack.peek() < num){
+        char[] numberCh = number.toCharArray();
+        
+        Stack<Integer> stack = new Stack<>();
+        for(int i = 0; i < numberCh.length; i++) {
+            int num = numberCh[i] - '0';
+            
+            while(!stack.isEmpty() && k > 0 && stack.peek() < num){
                 stack.pop();
-                k--;
+                k --;
             }
+            
             stack.push(num);
         }
-
-        // k가 남아있다면 뒤에서부터 삭제
-        while(k>0){
+        
+        while(k > 0){
             stack.pop();
-            k--;
+            k --;
         }
-
-        StringBuilder answer = new StringBuilder();
-
-        for(Character c : stack) {
-            answer.append(c);
+        
+        StringBuilder sb = new StringBuilder();
+        while(!stack.isEmpty()){
+            sb.append(stack.pop());
         }
-
-        return answer.toString();
+        
+        String answer = sb.reverse().toString();
+        
+        return answer;
     }
 }
