@@ -1,59 +1,44 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 class Solution {
-    ArrayList<Integer>[] neighbours;
+    boolean[] visited;
+    int answer;
     public int solution(int n, int[][] wires) {
-        neighbours = new ArrayList[n+1];
-
-        for (int i = 1; i <= n; i++) {
-            neighbours[i] = new ArrayList<>();
+        answer = n;
+        visited = new boolean[n+1];
+        
+        for(int[] wire : wires){
+            int towerA = wire[0];
+            int towerB = wire[1];
+            visited[towerB] = true;
+            visited[towerA] = true;
+            int cnt = dfs(towerA,wires,n);  // towerA와 연결된 타워만 찾으면 됨
+            visited[towerA] = false;
+            visited[towerB] = false;
+            
+            answer = Math.min(Math.abs(n - (2 * cnt)), answer);
         }
-
-        for (int[] wire : wires) {
-            int tower1 = wire[0];
-            int tower2 = wire[1];
-
-            // 서로에게 연결된 송전탑 기록
-            neighbours[tower1].add(tower2);
-            neighbours[tower2].add(tower1);
-        }
-
-        int count = n;
-        int diff = 0;
-        int min = Integer.MAX_VALUE;
-        for (int[] wire : wires) {
-            int tower1 = wire[0];
-            int tower2 = wire[1];
-
-            // 송전탑 사이를 끊으면 각자 갖는 연결된 송전탑 갯수
-            count = bfs(tower1, tower2, n);
-            diff = Math.abs(count - (n - count));
-            min = Math.min(diff, min);
-        }
-        return min;
+        
+        return answer;
     }
+    
+    int dfs(int towerA, int[][] wires, int n){
+        int cnt = 1;
+        for(int[] wire : wires){
+            
+            // 연결된 송전탑 찾음(방문한적 x)
+            if(wire[0] == towerA && !visited[wire[1]]) {
+                visited[wire[1]] = true;    // 방문 처리
+                cnt += dfs(wire[1],wires,n); // dfs
+                visited[wire[1]] = false;   // 백트래킹
 
-    private int bfs(int tower1, int tower2, int n) {
-        boolean[] visited = new boolean[n + 1];
-        Queue<Integer> queue = new LinkedList<>();
-
-        queue.add(tower1);
-        visited[tower1] = true;
-        int count = 1;
-
-        while (!queue.isEmpty()) {
-            int current = queue.poll();     // 현재 탐색중인 타워
-
-            for(int neighbour : neighbours[current]){
-                if(!visited[neighbour] && neighbour != tower2){
-                    visited[neighbour] = true;  // 방문 처리
-                    queue.add(neighbour);   // 다음에 탐색할 송전탑
-                    count++;    // 송전탑 개수
-                }
+            } else if(wire[1] == towerA && !visited[wire[0]]) {
+                visited[wire[0]] = true;    // 방문 처리
+                cnt += dfs(wire[0],wires, n); // dfs
+                visited[wire[0]] = false;   // 백트래킹
             }
         }
-
-        return count;
+        
+        return cnt;
     }
+    
 }
