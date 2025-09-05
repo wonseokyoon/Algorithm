@@ -1,21 +1,24 @@
 import java.util.*;
 class Solution {
-    String[] word = {"A","E","I","O","U"};
-    ArrayList<String> dic = new ArrayList<>();
-
-        public int solution(String words) {
-        BruteForceSearch(words,"");
-        return dic.indexOf(words);
+    public char[] words = {'A', 'E', 'I', 'O', 'U'};
+    public ArrayList<String> dictionary = new ArrayList<>();
+    
+    public int solution(String word) {
+        
+        dfs(new StringBuilder(),0);
+        int answer = dictionary.indexOf(word);
+        
+        return answer;
     }
-
-    private void BruteForceSearch(String words, String cur) {
-        if(cur.length() > 5){
-            return;
-        }
-
-        dic.add(cur);
-        for(int i = 0; i < 5; i++){
-            BruteForceSearch(words,cur+word[i]);
+    
+    void dfs(StringBuilder current,int len) {
+        if(len > 5) return;
+        
+        dictionary.add(current.toString());
+        
+        for(char word : words) {
+            dfs(current.append(word), len+1);
+            current.setLength(len);
         }
     }
 }
