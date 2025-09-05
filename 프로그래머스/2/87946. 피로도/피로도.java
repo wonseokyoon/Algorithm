@@ -1,25 +1,28 @@
+import java.util.*;
 class Solution {
-    public static int answer = 0;
-    
+    boolean[] visited;
+    int max = 0;
     public int solution(int k, int[][] dungeons) {
-        boolean[] visited = new boolean[dungeons.length];   // 방문 여부
-        dfs(k,dungeons,visited,0);
-        return answer;
+        visited = new boolean[dungeons.length];
+        
+        dfs(k,dungeons,0);
+        return max;
     }
-
-    public void dfs(int k, int[][] dungeons, boolean[] visited, int count) {
-        // 결론
-        answer = Math.max(count,answer);
-
-        for(int i = 0; i < dungeons.length; i++){
-            // 방문한적 없고, k가 더 클때
-            if(!visited[i] && dungeons[i][0] <= k){
+    
+    void dfs(int k, int[][] dungeons,int cnt){
+        
+        for(int i = 0 ; i< dungeons.length; i++){
+            int minK = dungeons[i][0];     // 최소 필요도
+            int requestK = dungeons[i][1];  // 요구 피로도
+            
+            // 방문한 적 없고, 요구 피로도를 만족
+            if(!visited[i] && k >= minK){
                 visited[i] = true;  // 방문 처리
-                dfs(k - dungeons[i][1],dungeons,visited,count+1);
-                visited[i] = false; // 백트래킹
-            }
-
+                dfs(k - requestK,dungeons,cnt+1);
+                visited[i] = false;     // 백트래킹
+            }            
         }
-
+        
+        if(max < cnt) max = cnt;
     }
 }
