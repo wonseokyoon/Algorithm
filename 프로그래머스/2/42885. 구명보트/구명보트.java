@@ -1,13 +1,23 @@
-import java.util.Arrays;
+import java.util.*;
 
 class Solution {
     public int solution(int[] people, int limit) {
+        ArrayList<Integer> list = new ArrayList<>();
         Arrays.sort(people);
-        int i = 0, j = people.length - 1;
-        for (; i < j; --j) {
-            if (people[i] + people[j] <= limit)
-                ++i;
+
+        int light = 0; 
+        int heavy = people.length -1;
+        
+        while(light <= heavy){
+            if(people[light] + people[heavy] > limit){
+                list.add(people[heavy]);
+                heavy --;
+            } else {
+                list.add(people[heavy] + people[light]);
+                heavy --;
+                light ++;
+            }
         }
-        return people.length - i;
+        return list.size();
     }
 }
