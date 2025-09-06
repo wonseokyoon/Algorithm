@@ -1,76 +1,71 @@
 import java.util.*;
 class Solution {
-    public int[] solution(String[] genres, int[] plays) {
-        int length = genres.length;
-        // 장르의 재생 횟수
-        HashMap<String,Integer> genreMap = new HashMap<>();
-        // 노래별 수록번호, 재생 횟수
-        HashMap<String,List<int[]>> songsMap = new HashMap<>();
+    class Songs implements Comparable<Songs> {
+        int idx;
+        int play;
         
-        for(int i = 0; i< length; i++){
+        public Songs(int idx, int play){
+            this.idx = idx;
+            this.play = play;
+        }
+        
+        @Override
+        public String toString(){
+            return "idx: " + idx + ", play: " + play + "\n";
+        }
+        
+        @Override
+        public int compareTo(Songs other){
+            if(other.play == this.play){
+                return this.idx - other.idx;
+            }
+            return other.play - this.play;
+        }
+        
+    }
+    
+    public int[] solution(String[] genres, int[] plays) {
+        HashMap<String,Integer> genreMap = new HashMap<>(); // 장르,플레이
+        HashMap<String, List<Songs>> songsMap = new HashMap<>();  // 장르: [고유번호, 플레이]
+        
+        for(int i = 0; i < genres.length; i++) {
             String genre = genres[i];
-            int cnt = plays[i];
+            int play = plays[i];
             
-            genreMap.put(genre, genreMap.getOrDefault(genre,0) + cnt);
+            genreMap.put(genre, genreMap.getOrDefault(genre,0) + play);
             
-            int[] info = {i,cnt};
-            // 기존에 이미 등록된 장르
+            Songs song = new Songs(i, play);
             if(songsMap.containsKey(genre)){
-                songsMap.get(genre).add(info);
+                songsMap.get(genre).add(song);
             } else{
-                List<int[]> newSongList = new ArrayList<>();
-                newSongList.add(info);
-                songsMap.put(genre,newSongList);
+                List<Songs> list = new ArrayList<>();
+                list.add(song);
+                songsMap.put(genre, list);                
             }
         }
         
-        // 정렬(장르 재생 횟수 기준 내림차순)
-        List<String> sortedGenres = new ArrayList<>(genreMap.keySet());
-        Collections.sort(sortedGenres, new Comparator<String>(){
+        List<String> sortedGenre = new ArrayList<>(genreMap.keySet());
+        
+        Collections.sort(sortedGenre, new Comparator<String>(){
             @Override
             public int compare(String s1, String s2){
                 return genreMap.get(s2) - genreMap.get(s1);
             }
         });
         
-        List<Integer> best = new ArrayList<>();
-        for(String genre: sortedGenres){
-            List<int[]> values = songsMap.get(genre);
-            
-            Collections.sort(values, new Comparator<int[]>(){
-                @Override
-                public int compare(int[] s1, int[] s2){
-                    if(s1[1] == s2[1]){     // 재생 횟수가 같다면 고유 번호 기준 오름차순
-                        return s1[1] - s2[1];
-                    }
-                    
-                    return s2[1] - s1[1];
-                }
-            });
-            
-            int cnt = 0;
-            for(int[] value : values){
-                if(cnt > 1) break;
-                int number = value[0];  // 고유 번호
-                best.add(number);
+        ArrayList<Integer> answer = new ArrayList<>();
+        for(String genre : sortedGenre){
+            List<Songs> songs = songsMap.get(genre);
+            Collections.sort(songs);
+            int cnt = 1;    // 한 장르당 2개씩만
+            for(Songs song : songs){
+                if(cnt > 2) break;
+                answer.add(song.idx);   // 고유 번호 등록
                 cnt ++;
             }
         }
         
-//         System.out.print("베스트 앨범: " + best);
-        
-        
-//         for(String key: songsMap.keySet()){
-//             System.out.print("key: " + key+", value:");
-//             List<int[]> values = songsMap.get(key);
-//             for(int[] value: values){
-//                 System.out.print(" " + Arrays.toString(value));
-//             }
-//             System.out.println("");
-//         }
-        
-        
-        return best.stream()
+        return answer.stream()
             .mapToInt(Integer::intValue)
             .toArray();
     }
