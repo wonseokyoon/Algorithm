@@ -1,73 +1,65 @@
 import java.util.*;
+
 class Solution {
     class Task {
-        private int idx;    // 작업 번호
-        private int requiredTime;   // 요청 시간
-        private int spendTime;    // 소요 시간
+        private int requiredTime;
+        private int spendTime;
+        private int idx;
         
-        public Task(int idx, int requiredTime, int spendTime){
-            this.idx = idx;
+        public Task(int requiredTime, int spendTime, int idx) {
             this.requiredTime = requiredTime;
             this.spendTime = spendTime;
-        }
-        
-        @Override
-        public String toString(){
-            // return "[%d,%d,%d]".formatted(this.idx,this.requiredTime,this.spendTime);
-            return "["+ this.idx + ","+ this.requiredTime + "," + this.spendTime +"]";
+            this.idx = idx;
         }
     }
     
     public int solution(int[][] jobs) {
-        Arrays.sort(jobs,(a,b) -> a[0] - b[0]);
+        // jobs 정렬
+        Arrays.sort(jobs, (a,b) -> a[0] - b[0]);
         
-        PriorityQueue<Task> waitQ = new PriorityQueue<>(new Comparator<Task>(){
-            @Override
-            public int compare(Task t1, Task t2){
-                if(t1.spendTime == t2.spendTime){
-                    if(t1.requiredTime == t2.requiredTime){
-                        // 3. 작업 번호가 빠른거
-                        return t1.idx - t2.idx;
-                    }
-                    // 2. 요청 시간이 빠른거
-                    return t1.requiredTime - t2.requiredTime;
+        // 1. 소요시간 짧은거, 요청 빨리한거
+        PriorityQueue<Task> pq = new PriorityQueue<>((a,b) -> {
+            if(a.spendTime == b.spendTime){
+                if(a.requiredTime == b.requiredTime){
+                    return a.idx - b.idx;
                 }
-                // 1. 소요시간이 짧은거
-                return t1.spendTime - t2.spendTime;
+                return a.requiredTime - b.requiredTime;  
             }
+            return a.spendTime - b.spendTime;  
         });
         
-        int currentTime = 0;
-        int jobIdx = 0;
-        int totalTime = 0;        
-        int complete = 0;
-        while(complete < jobs.length) {
+        int currentTime = 0;    // 현재 시간
+        int totalTime = 0;  // 총 작업 시간
+        int complete = 0;   // 작업 완료 갯수
+        int cnt = jobs.length;  // 작업 갯수
+        int jobIdx = 0;         // 작업 번호
+        
+        // 모든 작업이 완료될때까지 반복
+        while(complete < cnt) {
             
-            while(jobIdx < jobs.length && currentTime >= jobs[jobIdx][0]){
-                int idx = jobIdx;
+            while(jobIdx < cnt && currentTime >= jobs[jobIdx][0]) {
+                // 큐에 작업 추가
                 int requiredTime = jobs[jobIdx][0];
                 int spendTime = jobs[jobIdx][1];
-                Task task = new Task(idx,requiredTime,spendTime);
-                waitQ.offer(task);    // 대기 큐 등록
-                jobIdx ++;
+                Task task = new Task(requiredTime,spendTime,jobIdx);
+                pq.offer(task);
+                jobIdx++;
             }
             
-            if(!waitQ.isEmpty()) {
-                Task task = waitQ.poll();
-                int spendTime = task.spendTime;
-                int idx = task.idx;
+            // 동록된 작업 처리
+            if(!pq.isEmpty()) {
+                Task task = pq.poll();
                 int requiredTime = task.requiredTime;
+                int spendTime = task.spendTime;
                 
-                complete++;     // 완료 처리
-                currentTime += task.spendTime;  // 시간 갱신
-                totalTime += currentTime - task.requiredTime;
+                currentTime += spendTime;
+                complete ++;
+                totalTime += (currentTime - requiredTime);
             } else{
                 currentTime = jobs[jobIdx][0];
             }
-            
         }
         
-        int answer = totalTime / complete;
-        return answer;
+        return totalTime / complete;
     }
 }
