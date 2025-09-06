@@ -1,33 +1,37 @@
 import java.util.*;
+
 class Solution {
     public int[] solution(String[] operations) {
-        PriorityQueue<Integer> apq = new PriorityQueue<>();     // 오름차순
-        PriorityQueue<Integer> dpq = new PriorityQueue<>((a,b) -> b - a);   // 내림차순
+        // 오름차순: 최솟값
+        PriorityQueue<Integer> ascPq = new PriorityQueue<>();
+        // 내림차순: 최댓값
+        PriorityQueue<Integer> descPq = new PriorityQueue<>((a,b) -> b - a);
         
         int size = 0;
-        
         for(String operation : operations){
-            String command = operation.split(" ")[0];
-            String numStr = operation.split(" ")[1];
+            String commend = operation.split(" ")[0];
+            int num = Integer.parseInt(operation.split(" ")[1]);
             
-            if(command.equals("I")){
-                int num = Integer.parseInt(numStr);
-                apq.offer(num);
-                dpq.offer(num);
+            if(commend.equals("I")){
+                ascPq.offer(num);
+                descPq.offer(num);
                 size ++;
             } else{
-                if(size > 0){
-                    if(numStr.equals("-1")) {  // 최솟값 삭제
+                if(size > 0) {
+                    if(num == -1) {  // 최솟값 삭제
+                        descPq.remove(ascPq.poll());
                         size --;
-                        dpq.remove(apq.poll());
-                    } else { // 최댓값 삭제
+                    } else {    // 최댓값 삭제
+                        ascPq.remove(descPq.poll());
                         size --;
-                        apq.remove(dpq.poll());
                     }
                 }
             }
         }
-        if(size == 0) return new int[] {0,0};        
-        return new int[] {dpq.poll(), apq.poll()};
+        if(size > 0){
+            return new int[] {descPq.poll(),ascPq.poll()};
+        } else{
+            return new int[] {0,0};
+        }
     }
 }
