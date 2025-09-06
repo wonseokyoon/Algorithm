@@ -1,59 +1,37 @@
 import java.util.*;
+
 class Solution {
-    class Status{
+    class Stock {
+        private int time;
         private int price;
-        private int idx;
         
-        public Status(int price, int idx){
+        public Stock(int price, int time) {
             this.price = price;
-            this.idx = idx;
-        }
-        
-        @Override
-        public String toString(){
-            return "[" + this.price + "," + this.idx +"]";
+            this.time = time;
         }
     }
     
     public int[] solution(int[] prices) {
-        Stack<Status> stack = new Stack<>();
-        int len = prices.length;
-        int[] answer = new int[len];
+        Stack<Stock> stack = new Stack<>();
+        int[] answer = new int[prices.length];
         
-        for(int i =0; i < len ; i++){
-            int price = prices[i];
-            Status status = new Status(price,i);
-            if(stack.isEmpty()){
-                stack.push(status);  
-            } else {
-                while(true) {
-                    if(stack.isEmpty()){ 
-                        stack.push(status);  // 추가
-                        break;
-                    } 
-                    Status storedStaus = stack.peek();
-                    int storedPrice = storedStaus.price;
-                    int storedIdx = storedStaus.idx;
-                    
-                    // 새로운 값이 더 작을 때
-                    if(storedPrice > price) {
-                        answer[storedIdx] = i - storedIdx;
-                        stack.pop();    // 제거
-                    } else{
-                        stack.push(status);  // 추가
-                        break;
-                    }
-                }    
+        for(int currentTime = 0; currentTime < prices.length; currentTime ++) {
+            int price = prices[currentTime];
+
+            while(!stack.isEmpty()) {
+                // 가격이 떨어졌다면
+                if(stack.peek().price > price){
+                    Stock stock = stack.pop();
+                    answer[stock.time] = currentTime - stock.time;
+                } else break;
             }
+            stack.push(new Stock(price,currentTime));
         }
         
-        // 찌꺼기 처리
-        while(!stack.isEmpty()){
-            Status storedStaus = stack.pop();
-            int storedPrice = storedStaus.price;
-            int storedIdx = storedStaus.idx;
-            
-            answer[storedIdx] = len - 1 - storedIdx;
+        
+        while(!stack.isEmpty()) {
+            Stock stock = stack.pop();
+            answer[stock.time] = prices.length - 1 - stock.time;
         }
         
         return answer;
