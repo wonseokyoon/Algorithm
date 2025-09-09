@@ -2,22 +2,23 @@ import java.util.*;
 
 class Solution {
     public int solution(int[] people, int limit) {
-        ArrayList<Integer> list = new ArrayList<>();
         Arrays.sort(people);
-
-        int light = 0; 
-        int heavy = people.length -1;
         
+        int light = 0; 
+        int heavy = people.length - 1;
+        int cnt = 0; 
         while(light <= heavy){
-            if(people[light] + people[heavy] > limit){
-                list.add(people[heavy]);
-                heavy --;
-            } else {
-                list.add(people[heavy] + people[light]);
-                heavy --;
+            
+            // 둘이 탈 수 있음
+            if(people[heavy] + people[light] <= limit){
+                cnt ++; 
+                heavy --; 
                 light ++;
+            } else {    // 혼자만 탐
+                cnt ++;
+                heavy --;
             }
         }
-        return list.size();
+        return cnt;
     }
 }
