@@ -1,15 +1,15 @@
 class Solution {
-        public int solution(int n) {
-        int answer = 0;
-        long[] pib=new long[n+1];
-        pib[0]=0L;
-        pib[1]=1L;
-        int times=1;
-        for(int i=2; i<=n; i++){
-            pib[i]=(pib[i-1]+pib[i-2])%1234567L;
+    public int solution(int n) {
+        int answer = 1;
+        int f1 = 0, f2 = 1;
+
+        for(int i = 2; i<=n; i++){
+            answer = (f1 + f2)%1234567;
+            f1 = f2;
+            f2 = answer;
         }
-        //answer=(int)(pib[n]%1234567L);
-        answer=(int)(pib[n]);
+
+        //if(n>=2) answer %= 1234567;
         return answer;
     }
 }
