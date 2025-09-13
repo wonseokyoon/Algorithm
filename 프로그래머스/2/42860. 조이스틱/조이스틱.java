@@ -1,30 +1,34 @@
+import java.util.*;
 class Solution {
     public int solution(String name) {
-        char[] names = name.toCharArray();
-        int updown = 0;
-        
-        // 알파벳 변경 횟수
-        for(char ch : names) {
-            updown += Math.min(ch - 'A', 'Z' - ch + 1);
+        int upDown = 0;        
+        for(char ch : name.toCharArray()){
+            upDown += Math.min(ch - 'A','Z' - ch + 1);
         }
+        System.out.println(upDown);
+        
+        char[] names = name.toCharArray();
+        int leftRight = name.length() - 1;    // 기본값: 오른쪽으로 쭉 직진
+        // 1. 왼쪽 찍고 오른쪽으로 다시 도착
+        // 2. 오른쪽 찍고 왼쪽으로 다시 도착
+        // 3. 왼쪽으로 쭉 직진 , 오른쪽으로 쭉 직진
         
         int len = name.length();
-        int leftRight = len - 1;
-        for(int i = 0; i < len; i++) {
+        for(int i = 0; i < len ; i++) {
             int next = i + 1;
             
-            // A가 몇개나 있는지 확인
-            while(next < len && names[next] == 'A') {
-                next++;
+            while(next < len && names[next] == 'A'){
+                next ++;
             }
             
-            // 1. 오른쪽 찍고 왼쪽으로 방향 전환
-            leftRight = Math.min(i * 2 + (len - next), leftRight);
-            
-            // 2. 왼쪽 찍고 오른쪽으로 방향 전환
-            leftRight = Math.min((len - next) * 2 + i, leftRight);
+            // 1번 
+            int temp1 = (len - next) * 2 + i;
+            // 2번
+            int temp2 = (i * 2) + len-next;
+            leftRight = Math.min(leftRight,Math.min(temp1,temp2));
         }
         
-        return leftRight + updown;
+        int answer = leftRight + upDown;
+        return answer;
     }
 }
