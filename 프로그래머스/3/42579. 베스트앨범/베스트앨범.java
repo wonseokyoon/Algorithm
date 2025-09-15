@@ -1,52 +1,50 @@
 import java.util.*;
+
 class Solution {
-    class Songs implements Comparable<Songs> {
-        int idx;
-        int play;
+    public class Song implements Comparable<Song> {
+        int play;   // 재생횟수 
+        int idx;    // 고유 번호
         
-        public Songs(int idx, int play){
-            this.idx = idx;
+        public Song(int play, int idx){
             this.play = play;
+            this.idx = idx;
         }
         
         @Override
-        public String toString(){
-            return "idx: " + idx + ", play: " + play + "\n";
+        public int compareTo(Song other){
+            if(other.play == this.play) return this.idx - other.idx;
+            else return other.play - this.play;
         }
-        
-        @Override
-        public int compareTo(Songs other){
-            if(other.play == this.play){
-                return this.idx - other.idx;
-            }
-            return other.play - this.play;
-        }
-        
     }
     
     public int[] solution(String[] genres, int[] plays) {
-        HashMap<String,Integer> genreMap = new HashMap<>(); // 장르,플레이
-        HashMap<String, List<Songs>> songsMap = new HashMap<>();  // 장르: [고유번호, 플레이]
+        // 장르별 재생 횟수
+        Map<String,Integer> genreMap = new HashMap<>();
+        Map<String,ArrayList<Song>> songMap = new HashMap<>(); // 장르: [재생횟수, 고유번호]
         
-        for(int i = 0; i < genres.length; i++) {
+        for(int i = 0; i < genres.length; i ++) {
             String genre = genres[i];
             int play = plays[i];
             
             genreMap.put(genre, genreMap.getOrDefault(genre,0) + play);
             
-            Songs song = new Songs(i, play);
-            if(songsMap.containsKey(genre)){
-                songsMap.get(genre).add(song);
+            Song song = new Song(play,i);
+            if(songMap.containsKey(genre)){
+                songMap.get(genre).add(song);
             } else{
-                List<Songs> list = new ArrayList<>();
-                list.add(song);
-                songsMap.put(genre, list);                
+                ArrayList<Song> songs = new ArrayList<>();
+                songs.add(song);
+                songMap.put(genre,songs);
             }
         }
         
-        List<String> sortedGenre = new ArrayList<>(genreMap.keySet());
+        ArrayList<String> sortedList = new ArrayList<>();
+        for(String key : genreMap.keySet()){
+            sortedList.add(key);
+        }
         
-        Collections.sort(sortedGenre, new Comparator<String>(){
+        // 내림차순 정렬
+        Collections.sort(sortedList, new Comparator<String>() {
             @Override
             public int compare(String s1, String s2){
                 return genreMap.get(s2) - genreMap.get(s1);
@@ -54,19 +52,19 @@ class Solution {
         });
         
         ArrayList<Integer> answer = new ArrayList<>();
-        for(String genre : sortedGenre){
-            List<Songs> songs = songsMap.get(genre);
-            Collections.sort(songs);
-            int cnt = 1;    // 한 장르당 2개씩만
-            for(Songs song : songs){
-                if(cnt > 2) break;
-                answer.add(song.idx);   // 고유 번호 등록
-                cnt ++;
+        
+        for(String genre : sortedList){
+            ArrayList<Song> songList = songMap.get(genre);
+            Collections.sort(songList);
+            int k = 1;
+            
+            for(Song song : songList){
+                if(k > 2) break;
+                answer.add(song.idx);
+                k++;
             }
         }
         
-        return answer.stream()
-            .mapToInt(Integer::intValue)
-            .toArray();
+        return answer.stream().mapToInt(Integer::intValue).toArray();
     }
 }
