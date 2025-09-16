@@ -1,34 +1,34 @@
 import java.util.*;
 class Solution {
     public int solution(String name) {
-        int upDown = 0;        
-        for(char ch : name.toCharArray()){
-            upDown += Math.min(ch - 'A','Z' - ch + 1);
+        int upDown = 0;
+        
+        for(char ch : name.toCharArray()) {
+            upDown += Math.min(ch - 'A', 'Z' - ch + 1);
         }
         System.out.println(upDown);
         
-        char[] names = name.toCharArray();
-        int leftRight = name.length() - 1;    // 기본값: 오른쪽으로 쭉 직진
-        // 1. 왼쪽 찍고 오른쪽으로 다시 도착
-        // 2. 오른쪽 찍고 왼쪽으로 다시 도착
-        // 3. 왼쪽으로 쭉 직진 , 오른쪽으로 쭉 직진
-        
+        char[] ch = name.toCharArray();
         int len = name.length();
-        for(int i = 0; i < len ; i++) {
-            int next = i + 1;
-            
-            while(next < len && names[next] == 'A'){
-                next ++;
+        int leftRight = len - 1;
+        for(int i = 0; i < len; i++) {
+            int next = i+1;
+            while(next < len && ch[next] == 'A'){
+                next++;
             }
+            // len = 9
+            // next = 7
+            // JAAAAAABB
             
-            // 1번 
-            int temp1 = (len - next) * 2 + i;
-            // 2번
-            int temp2 = (i * 2) + len-next;
-            leftRight = Math.min(leftRight,Math.min(temp1,temp2));
+            // 왼쪽 찍고, 오른쪽으로
+            int left = i * 2 + len - next;
+            // 오른쪽 돌아서 찍고, 다시 왼쪽으로
+            int right = (len - next) * 2 + i;
+            
+            int min = Math.min(left,right);
+            leftRight = Math.min(min,leftRight);
         }
         
-        int answer = leftRight + upDown;
-        return answer;
+        return upDown + leftRight;
     }
 }
