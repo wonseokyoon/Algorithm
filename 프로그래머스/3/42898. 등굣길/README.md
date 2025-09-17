@@ -1,10 +1,10 @@
 # [level 3] 등굣길 - 42898 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/42898) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/42898#) 
 
 ### 성능 요약
 
-메모리: 72.3 MB, 시간: 0.65 ms
+메모리: 54.6 MB, 시간: 0.48 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2025년 09월 17일 22:26:34
+2025년 09월 17일 22:30:56
 
 ### 문제 설명
 
