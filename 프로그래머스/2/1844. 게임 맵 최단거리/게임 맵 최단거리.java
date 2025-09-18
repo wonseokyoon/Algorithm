@@ -1,39 +1,47 @@
 import java.util.*;
 class Solution {
+    boolean[][] visited;
+    int[] dx = {-1,1,0,0};
+    int[] dy = {0,0,-1,1};
+    int row;
+    int col;
+    
     public int solution(int[][] maps) {
-        int xLength = maps.length;   // x축 길이
-        int yLength = maps[0].length;      // y축 길이
-
-        int[][] move = {{-1,0},{1,0},{0,-1},{0,1}};     // 이동(상하좌우)
-        int[][] distance = new int[xLength][yLength];   // 거리 좌표
-
-        // 좌표 큐
+        row = maps.length;
+        col = maps[0].length;
+        visited = new boolean[row][col];
+        
+        int answer = bfs(0,0,1,maps);
+        return answer;
+    }
+    
+    int bfs(int x,int y, int distance,int[][] maps) {
         Queue<int[]> queue = new LinkedList<>();
-        queue.offer(new int[]{0,0});
-        distance[0][0] = 1;
-
-        while(!queue.isEmpty()){
-            int[] cur = queue.poll();   // 현재 좌표
-            int x = cur[0];
-            int y = cur[1];
-
-            if(x == xLength-1 && y == yLength-1) return distance[x][y];
-
-            for(int i = 0; i < 4; i++){
-                int dx = x + move[i][0];   // 이동 후 x좌표
-                int dy = y + move[i][1];   // 이동 후 y좌표
-
-
-                // 범위 체크
-                if(dx >= 0 && dy >= 0 && dx < xLength && dy < yLength){
-                    // 방문 체크 + 길인지 체크
-                    if(maps[dx][dy] == 1 && distance[dx][dy] == 0){
-                        queue.add(new int[]{dx,dy});    // 큐 등록
-                        distance[dx][dy] = distance[x][y] + 1;      // 이전 좌표 +1
-                    }
+        queue.offer(new int[]{x,y,distance});
+        
+        while(!queue.isEmpty()) {
+            int[] current = queue.poll();
+            int currentX = current[0];
+            int currentY = current[1];
+            int currentDistance = current[2];
+            visited[currentX][currentY] = true;
+            
+            if(currentX == row-1 && currentY == col-1) return currentDistance;
+            
+            int nextX;
+            int nextY;
+            for(int i =0 ; i < 4; i ++){
+                nextX = currentX + dx[i];
+                nextY = currentY + dy[i];
+                
+                // 범위 내에서, 방문한적 없고, 벽이 아님
+                if(nextX >= 0 && nextX < row && nextY >= 0 && nextY < col && !visited[nextX][nextY] && maps[nextX][nextY] == 1){
+                    visited[nextX][nextY] = true;
+                    queue.offer(new int[]{nextX,nextY,currentDistance+1});
                 }
             }
         }
-        return -1;  // 도달 못하는 경우
+        
+        return -1;
     }
 }
