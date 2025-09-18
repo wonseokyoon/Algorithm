@@ -1,21 +1,24 @@
 class Solution {
+    int answer = 0;
     public int solution(int[] numbers, int target) {
-        return dfs(numbers,target,0,0);
+        boolean[] visited = new boolean[numbers.length];
+        int current = 0;
+        int len = numbers.length;
+        
+        dfs(0,current,target,len,numbers);
+        
+        return answer;
     }
-
-    private int dfs(int[] numbers, int target, int index, int sum) {
-        int cnt = 0;
-        // 종료 조건 체크        
-       if(index == numbers.length){
-            return sum == target ? 1 : 0;
+    
+    void dfs(int idx, int current, int target, int len,int[] numbers){
+        if(idx == len) {
+            if(current == target) answer ++;
+            return;
         }
         
-        // + 부호 추가, 조건에 해당되면 +1, 아니면 아무일도 안일어남
-        cnt += dfs(numbers,target,index+1,sum+numbers[index]);
-        // - 부호 추가, 조건에 해당되면 +1, 아니면 아무일도 안일어남
-        cnt += dfs(numbers,target,index+1,sum-numbers[index]);
-        
-        // 최종 갯수 반환
-        return cnt;
+        // 더하기 
+        dfs(idx+1,current + numbers[idx],target,len,numbers);
+        // 빼기
+        dfs(idx+1,current - numbers[idx],target,len,numbers);
     }
 }
