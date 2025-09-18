@@ -1,59 +1,54 @@
 import java.util.*;
 class Solution {
-    public boolean[] visited;
+    boolean[] visited;
     
-    static class State {
-        private final String word;
-        private final int cnt;
+    public class Status{
+        private String current;
+        private int cnt;
         
-        public State(String word,int cnt){
-            this.word = word;
+        public Status(String current, int cnt){
+            this.current = current;
             this.cnt = cnt;
         }
     }
     
     public int solution(String begin, String target, String[] words) {
-        visited = new boolean[words.length]; 
-        int answer = bfs(words,begin,target);
+        visited = new boolean[words.length];
+        int answer = bfs(begin,target,words,0);
         return answer;
     }
     
-    int bfs(String[] words,String begin,String target) {
-        Queue<State> queue = new LinkedList<>();
-
-        queue.offer(new State(begin,0));
- 
-        while(!queue.isEmpty()){
-            State current = queue.poll();
-            String currentWord = current.word;
-            int currentCnt = current.cnt;
+    int bfs(String current, String target, String[] words,int cnt){
+        Queue<Status> queue = new LinkedList<>();
+        queue.offer(new Status(current,cnt));
+        
+        while(!queue.isEmpty()) {
+            Status status = queue.poll();
+            String stockedStr = status.current;
+            int stockedCnt = status.cnt;
             
-            if(currentWord.equals(target)) {
-                return currentCnt;
-            }
+            if(stockedStr.equals(target)) return stockedCnt;
             
-            // 변환 가능한 단어 탐색
-            for(int i = 0; i< words.length; i ++){
-                // 변환 가능하다면(단어 하나만 변경)
-                if(!visited[i] && canChange(currentWord,words[i])){
-                    visited[i] = true;      // 방문 처리
-                    queue.offer(new State(words[i],currentCnt + 1));
-                } 
+            for(int i =0; i < words.length; i++) {
+                String word = words[i];
+                if(!visited[i] && canChange(word,stockedStr)) {    // 변환 가능
+                    visited[i] = true;
+                    queue.offer(new Status(word,stockedCnt+1));
+                }
             }
         }
         return 0;
     }
     
-    boolean canChange(String current, String target){
-        int diff = 0;
-        char[] ch1 = current.toCharArray();
-        char[] ch2 = target.toCharArray();
-        for(int i = 0; i< current.length();i++){
-            if(ch1[i] != ch2[i]) diff++;
-            if(diff > 1) {
-                return false;
-            }
+    boolean canChange(String words, String targets) {
+        char[] word = words.toCharArray();
+        char[] target = targets.toCharArray();
+        int cnt = 0;
+        for(int i = 0; i < words.length(); i++){
+            if(word[i] != target[i]) cnt ++;
+            if(cnt > 1) return false;
         }
+        
         return true;
     }
 }
