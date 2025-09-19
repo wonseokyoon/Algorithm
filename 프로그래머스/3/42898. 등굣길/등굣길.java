@@ -1,39 +1,38 @@
 import java.util.*;
 
 class Solution {
+    boolean[][] visited;
+    int[] dx = {-1,1,0,0};
+    int[] dy = {0,0,-1,1};
+    
     public int solution(int m, int n, int[][] puddles) {
-        int[][] dp = new int[m][n];
-        boolean[][] puddle = new boolean[m][n];
-        for(int[] p : puddles) {
-            int x = p[0] - 1;
-            int y = p[1] - 1;
-            puddle[x][y] = true;
+        int[][] maps = new int[n+1][m+1];   // 지도
+        visited = new boolean[n+1][m+1];
+        
+        for(int[] puddle : puddles) {
+            int px = puddle[0];
+            int py = puddle[1];
+            visited[py][px] = true;
         }
         
-        dp[0][0] = 0;
-        
-        for(int i = 1; i < m; i ++){
-            // 가는길이 멀쩡하면 전부 1
-            if(!puddle[i][0]) dp[i][0] = 1;
-            else break;
+        for(int i = 1; i < n+1 ; i ++) {
+            if(visited[i][1]) break;
+            maps[i][1] = 1;
+        }
+        for(int i = 1; i < m+1 ; i ++) {
+            if(visited[1][i]) break;
+            maps[1][i] = 1;
         }
         
-        for(int i = 1; i < n; i ++){
-            // 가는길이 멀쩡하면 전부 1
-            if(!puddle[0][i]) dp[0][i] = 1;
-            else break;
-        }
-        
-
-        for(int i = 1; i < m; i ++){
-            for(int j = 1; j < n ; j ++){
-                if(puddle[i][j]) continue;
-
-                dp[i][j] = (dp[i-1][j] + dp[i][j-1])% 1000000007;
+        for(int i = 2; i < n+1; i++){
+            for(int j = 2; j < m+1; j++) {
+                if(!visited[i][j]){
+                    maps[i][j] = (maps[i-1][j] + maps[i][j-1]) % 1000000007;
+                }
             }
         }
         
-        int answer = dp[m-1][n-1];
+        int answer = maps[n][m];
         return answer;
     }
 }
