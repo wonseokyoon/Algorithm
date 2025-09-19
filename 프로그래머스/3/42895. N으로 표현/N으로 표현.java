@@ -1,35 +1,37 @@
 import java.util.*;
 
 class Solution {
+    ArrayList<HashSet<Integer>> dp = new ArrayList<>();
     
     public int solution(int N, int number) {
-        ArrayList<HashSet<Integer>> dp = new ArrayList<>();
-        HashSet<Integer> set = new HashSet<>();
-        
-        for(int i = 0; i < 9; i ++) {
-            dp.add(new HashSet<>());            
+        if(N == number) return 1;
+        // 빈 리스트 생성
+        for(int i = 0; i <= 8; i++){
+            dp.add(new HashSet<Integer>());
         }
         
-        for(int i = 1; i < 9; i++){
+        // 이어 붙이기
+        StringBuilder sb = new StringBuilder();
+        for(int i = 1; i <= 8; i++) {
+            sb.append(N);
+            dp.get(i).add(Integer.parseInt(sb.toString()));
+        }
+        
+        // 사칙 연산
+        for(int i = 2; i <= 8; i++) {
             HashSet<Integer> currentSet = dp.get(i);
-            StringBuilder sb = new StringBuilder();
-            for(int j = 0; j < i; j ++){
-                sb.append(N);
-            }
             
-            currentSet.add(Integer.parseInt(sb.toString()));
-            
-            // 사칙연산
             for(int j = 1; j < i; j++) {
+                int k = i - j;
                 HashSet<Integer> setJ = dp.get(j);
-                HashSet<Integer> setK = dp.get(i-j);
+                HashSet<Integer> setK = dp.get(k);
                 
-                for(int num1 : setJ){
-                    for(int num2 : setK){
+                for(Integer num1 : setJ) {
+                    for(Integer num2 : setK) {
                         currentSet.add(num1 + num2);
-                        currentSet.add(num1 - num2);    
-                        currentSet.add(num1 * num2);    
-                        if(num2 != 0) currentSet.add(num1 / num2);    
+                        currentSet.add(num1 - num2);
+                        currentSet.add(num1 * num2);
+                        if(num2 != 0) currentSet.add(num1 / num2);
                     }
                 }
             }
