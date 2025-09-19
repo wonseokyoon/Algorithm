@@ -2,31 +2,29 @@ import java.util.*;
 
 class Solution {
     public int solution(int[] money) {
-        int n = money.length;   // 집의 갯수
+        // 1번 집을 털 경우 -> 마지막 집 못텀
+        // 1번 집을 안 털 경우 -> 마지막 집 털 수 있음
+        int length = money.length;
+        if(length == 1) return money[0];
         
-        if(n==1) return money[0];
+        int[] maxDp1 = new int[length];
+        int[] maxDp2 = new int[length];
         
-        // 첫번째 집을 터는 경우(마지막 집 제외)
-        int[] dp1 = new int[n];
-        dp1[0] = money[0];
-        dp1[1] = Math.max(money[0],money[1]);
+        maxDp1[0] = money[0];
+        maxDp1[1] = Math.max(money[0],money[1]);
         
-        for(int i = 2; i < n-1; i++){
-            // i번째 집을 털거나 or 털지 않거나
-            dp1[i] = Math.max(dp1[i-1], dp1[i-2] + money[i]);
+        for(int i=2; i < length - 1; i++) {
+            maxDp1[i] = Math.max(maxDp1[i-2] + money[i], maxDp1[i-1]);
         }
-        int max1 = dp1[n-2]; 
         
-        int[] dp2 = new int[n];
-        dp2[0] = 0;
-        dp2[1] = money[1];
+        maxDp2[0] = 0;
+        maxDp2[1] = money[1];
         
-        for(int i = 2; i < n; i ++){
-            dp2[i] = Math.max(dp2[i-1],dp2[i-2] + money[i]);
+        for(int i=2; i < length; i ++){
+            maxDp2[i] = Math.max(maxDp2[i-2] + money[i], maxDp2[i-1]);
         }
-        int max2 = dp2[n-1]; 
         
-        int answer = Math.max(max1,max2);
+        int answer = Math.max(maxDp1[length-2],maxDp2[length-1]);
         return answer;
     }
 }
